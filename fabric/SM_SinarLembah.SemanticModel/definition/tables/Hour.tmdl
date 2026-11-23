@@ -1,0 +1,28 @@
+/// 24 hours of the day.
+table Hour
+	lineageTag: b8e45c0a-2a1a-5c6e-b3cb-0d3aa8aa5767
+
+	column hour_of_day
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: hour_of_day
+		lineageTag: cdf71b6e-cbd2-5648-949f-3e4429e8a732
+
+	column hour_label
+		dataType: string
+		summarizeBy: none
+		sourceColumn: hour_label
+		sortByColumn: hour_of_day
+		lineageTag: b33bef5a-6ecc-55ed-bf28-6d02e6b8024b
+
+	column period
+		dataType: string
+		summarizeBy: none
+		sourceColumn: period
+		lineageTag: 27d649ba-e186-5ea2-833f-78e50015f6e4
+
+	partition Hour = entity
+		mode: directLake
+		source
+			entityName: gold_dim_hour
+			expressionSource: 'DirectLake - LH_SinarLembah'

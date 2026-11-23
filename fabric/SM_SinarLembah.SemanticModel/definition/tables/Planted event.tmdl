@@ -1,0 +1,142 @@
+/// The anomalies the generator planted, graded: matured, caught, alerts.
+table 'Planted event'
+	lineageTag: c9e0f6cd-965d-5567-bb7b-4eff696ce319
+
+	/// Planted events in the grading window that ended at least a day before the cut-off.
+	measure 'Events matured' = COALESCE ( CALCULATE ( COUNTROWS ( 'Planted event' ), 'Planted event'[in_window] = TRUE (), 'Planted event'[is_matured] = TRUE () ), 0 )
+		formatString: #,0
+		displayFolder: Detector
+		lineageTag: 5ccc1325-f458-5f62-9c81-732ed3896f48
+
+	/// Matured events with at least one alert inside the event window.
+	measure 'Events caught' = COALESCE ( CALCULATE ( COUNTROWS ( 'Planted event' ), 'Planted event'[in_window] = TRUE (), 'Planted event'[is_matured] = TRUE (), 'Planted event'[is_caught] = TRUE () ), 0 )
+		formatString: #,0
+		displayFolder: Detector
+		lineageTag: 4b28dbca-8167-57ef-9529-7daac3285695
+
+	/// Events caught over events matured; matured only, never blended with young events.
+	measure Recall = DIVIDE ( [Events caught], [Events matured] )
+		formatString: 0%
+		displayFolder: Detector
+		lineageTag: e3d2fdbc-1006-5402-b3bb-b0b3259a1622
+
+	column event_id
+		dataType: string
+		summarizeBy: none
+		sourceColumn: event_id
+		lineageTag: b1634199-98ad-57bf-9a43-f633e34ef89c
+
+	column feeder_id
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: feeder_id
+		lineageTag: 175efb55-f51c-510d-80cb-c4ef3295d68b
+
+	column event_type
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: event_type
+		lineageTag: 800b528c-40eb-578e-b111-8cb020992618
+
+	column event_label
+		dataType: string
+		summarizeBy: none
+		sourceColumn: event_label
+		lineageTag: 50575e0f-de9b-5dc0-8708-040a87dc3f2c
+
+	column strength
+		dataType: string
+		summarizeBy: none
+		sourceColumn: strength
+		lineageTag: 2b0c1790-aa29-5648-bc21-4fee585244f2
+
+	column start_hour
+		dataType: dateTime
+		formatString: dd mmm yyyy hh:nn
+		summarizeBy: none
+		sourceColumn: start_hour
+		lineageTag: d4db0f4c-217d-53d8-8753-93ebd7ae7e76
+
+	column end_hour
+		dataType: dateTime
+		formatString: dd mmm yyyy hh:nn
+		summarizeBy: none
+		sourceColumn: end_hour
+		lineageTag: 73c14792-3308-5890-ba6c-3c4cf93cbc7e
+
+	column start_date
+		dataType: dateTime
+		isHidden
+		formatString: dd mmm yyyy hh:nn
+		summarizeBy: none
+		sourceColumn: start_date
+		lineageTag: 156aca56-d6e6-597a-9538-8fa709cce2fe
+
+	column start_index
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: start_index
+		lineageTag: d71743fc-48ae-5b78-bfe8-24714704bc5e
+
+	column end_index
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: end_index
+		lineageTag: 09abe10d-4e58-5514-8762-7f0e988b1924
+
+	column duration_h
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: duration_h
+		lineageTag: 1ce222eb-4947-5ad6-a91f-3733d5df36a1
+
+	column factor
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		summarizeBy: none
+		sourceColumn: factor
+		lineageTag: 7a14b2b0-a20e-5575-86da-836b8370db6b
+
+	column in_window
+		dataType: boolean
+		isHidden
+		summarizeBy: none
+		sourceColumn: in_window
+		lineageTag: e349b36b-b18e-5275-b48f-8fe36a729954
+
+	column is_matured
+		dataType: boolean
+		isHidden
+		summarizeBy: none
+		sourceColumn: is_matured
+		lineageTag: af5997e2-ab61-581d-87b3-69d19382c37c
+
+	column is_caught
+		dataType: boolean
+		summarizeBy: none
+		sourceColumn: is_caught
+		lineageTag: 5fe2339c-0a79-507e-b82d-9ad1caf722fc
+
+	column alerts_n
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: alerts_n
+		lineageTag: b6f31d76-6862-59b4-ab5d-45fa3aec1cdb
+
+	column first_alert_lag_h
+		dataType: double
+		formatString: #,0.00
+		summarizeBy: none
+		sourceColumn: first_alert_lag_h
+		lineageTag: 33abf428-7992-54f2-81ac-cd7ddb8f5bc4
+
+	partition 'Planted event' = entity
+		mode: directLake
+		source
+			entityName: gold_event_grade
+			expressionSource: 'DirectLake - LH_SinarLembah'

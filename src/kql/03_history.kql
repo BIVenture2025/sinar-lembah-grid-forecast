@@ -1,0 +1,25 @@
+.set-or-append meter_reading with (tags = '["ingest-by:H0000"]', ingestIfNotExists = '["H0000"]') <| fn_gen(0, 720) | extend batch_id = 'H0000', loaded_at = now()
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:H0030"]', ingestIfNotExists = '["H0030"]') <| fn_gen(720, 1440) | extend batch_id = 'H0030', loaded_at = now()
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:H0060"]', ingestIfNotExists = '["H0060"]') <| fn_gen(1440, 2160) | extend batch_id = 'H0060', loaded_at = now()
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:H0090"]', ingestIfNotExists = '["H0090"]') <| fn_gen(2160, 2880) | extend batch_id = 'H0090', loaded_at = now()
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:H0120"]', ingestIfNotExists = '["H0120"]') <| fn_gen(2880, 3600) | extend batch_id = 'H0120', loaded_at = now()
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:H0150"]', ingestIfNotExists = '["H0150"]') <| fn_gen(3600, 4320) | extend batch_id = 'H0150', loaded_at = now()
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:H0180"]', ingestIfNotExists = '["H0180"]') <| fn_gen(4320, 5040) | extend batch_id = 'H0180', loaded_at = now()
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:H0210"]', ingestIfNotExists = '["H0210"]') <| fn_gen(5040, 5760) | extend batch_id = 'H0210', loaded_at = now()
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:H0240"]', ingestIfNotExists = '["H0240"]') <| fn_gen(5760, 6480) | extend batch_id = 'H0240', loaded_at = now()
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:H0270"]', ingestIfNotExists = '["H0270"]') <| fn_gen(6480, 7200) | extend batch_id = 'H0270', loaded_at = now()
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:H0300"]', ingestIfNotExists = '["H0300"]') <| fn_gen(7200, 7920) | extend batch_id = 'H0300', loaded_at = now()
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:H0330"]', ingestIfNotExists = '["H0330"]') <| fn_gen(7920, 8640) | extend batch_id = 'H0330', loaded_at = now()
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:H0360"]', ingestIfNotExists = '["H0360"]') <| fn_gen(8640, 9312) | extend batch_id = 'H0360', loaded_at = now()

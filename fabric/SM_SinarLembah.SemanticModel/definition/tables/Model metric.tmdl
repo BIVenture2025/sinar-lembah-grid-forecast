@@ -1,0 +1,83 @@
+/// Forecast metrics from the backtest, with intervals.
+table 'Model metric'
+	lineageTag: ae36c297-fda0-5014-8b57-f24ce8abd1c9
+
+	/// Low end of the 95% weekly block bootstrap interval of the gain; all feeders only.
+	measure 'Gain interval low' = IF ( DISTINCTCOUNT ( Feeder[feeder_id] ) = 48, CALCULATE ( SUM ( 'Model metric'[ci_low] ), 'Model metric'[metric] = "Gain, points" ) )
+		formatString: 0.0
+		displayFolder: Forecast
+		lineageTag: c078d732-efad-591d-af01-b01ca7ffb37c
+
+	/// High end of the 95% interval of the gain; all feeders only.
+	measure 'Gain interval high' = IF ( DISTINCTCOUNT ( Feeder[feeder_id] ) = 48, CALCULATE ( SUM ( 'Model metric'[ci_high] ), 'Model metric'[metric] = "Gain, points" ) )
+		formatString: 0.0
+		displayFolder: Forecast
+		lineageTag: 4bdcdeeb-8344-5681-a07d-b7e43003090b
+
+	/// Share of backtest hours (folds 7 to 9, out of sample) inside the all-feeders range; the range aims at 80%.
+	measure 'System range coverage' = CALCULATE ( SUM ( 'Model metric'[value] ), 'Model metric'[metric] = "Range coverage", 'Model metric'[model] = "System" )
+		formatString: 0%
+		displayFolder: Forecast
+		lineageTag: e0bd2d6a-64b4-5099-9651-f102a5816e94
+
+	column metric
+		dataType: string
+		summarizeBy: none
+		sourceColumn: metric
+		lineageTag: 1d92f995-c15a-5548-99c8-85df813e8af8
+
+	column model
+		dataType: string
+		summarizeBy: none
+		sourceColumn: model
+		lineageTag: 3f217880-08a0-5cde-9bff-9cc362a9ef06
+
+	column value
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		summarizeBy: none
+		sourceColumn: value
+		lineageTag: 392e6d48-469f-548f-846e-97482419616e
+
+	column ci_low
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		summarizeBy: none
+		sourceColumn: ci_low
+		lineageTag: acb0da35-0b9d-5bd4-abed-0bcc3469563b
+
+	column ci_high
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		summarizeBy: none
+		sourceColumn: ci_high
+		lineageTag: d67b9a1b-7ad9-58b6-96c9-a76206cb0a29
+
+	column n
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: n
+		lineageTag: 951f64b5-fe70-5dc1-a41c-42e06f473384
+
+	column scope
+		dataType: string
+		summarizeBy: none
+		sourceColumn: scope
+		lineageTag: 16bf4745-3a7b-5e01-a86b-2b5a0560824c
+
+	column run_id
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: run_id
+		lineageTag: 2867f90e-1f4c-572c-981f-4c95783969d4
+
+	partition 'Model metric' = entity
+		mode: directLake
+		source
+			entityName: gold_model_metric
+			expressionSource: 'DirectLake - LH_SinarLembah'

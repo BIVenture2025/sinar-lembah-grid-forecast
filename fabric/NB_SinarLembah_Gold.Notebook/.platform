@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "NB_SinarLembah_Gold",
+    "description": "P37 Gold: date and hour tables, alerts as incidents with cause, detector grading with a control."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "37a00000-0000-4000-8000-0000000000a1"
+  }
+}

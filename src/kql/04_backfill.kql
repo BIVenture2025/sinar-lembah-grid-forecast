@@ -1,0 +1,9 @@
+.set-or-append baseline_profile with (tags = '["ingest-by:BL_B1"]', ingestIfNotExists = '["BL_B1"]') <| fn_baseline('B1', 248, 332, 7968, 9312)
+//--
+.set-or-append reading_scored with (tags = '["ingest-by:BF_SCORED"]', ingestIfNotExists = '["BF_SCORED"]') <| fn_score_range(7968, 9312, 'B1')
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:BF_ALERT"]', ingestIfNotExists = '["BF_ALERT"]') <| fn_alert_range(7968, 9312)
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:BF_FLAT"]', ingestIfNotExists = '["BF_FLAT"]') <| fn_flat_range(7968, 9312, 'Backfill')
+//--
+.set-or-append baseline_profile with (tags = '["ingest-by:BL_B2"]', ingestIfNotExists = '["BL_B2"]') <| fn_baseline('B2', 304, 388, 9312, 9504)

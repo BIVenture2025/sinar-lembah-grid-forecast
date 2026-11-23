@@ -1,0 +1,671 @@
+.set-or-append meter_reading with (tags = '["ingest-by:R09312"]', ingestIfNotExists = '["R09312"]') <| fn_gen(9312, 9313) | extend batch_id = 'R09312', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09312"]', ingestIfNotExists = '["FR09312"]') <| fn_flat_range(9312, 9313, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09313"]', ingestIfNotExists = '["R09313"]') <| fn_gen(9313, 9314) | extend batch_id = 'R09313', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09313"]', ingestIfNotExists = '["FR09313"]') <| fn_flat_range(9313, 9314, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09314"]', ingestIfNotExists = '["R09314"]') <| fn_gen(9314, 9315) | extend batch_id = 'R09314', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09314"]', ingestIfNotExists = '["FR09314"]') <| fn_flat_range(9314, 9315, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09315"]', ingestIfNotExists = '["R09315"]') <| fn_gen(9315, 9316) | extend batch_id = 'R09315', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09315"]', ingestIfNotExists = '["FR09315"]') <| fn_flat_range(9315, 9316, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09316"]', ingestIfNotExists = '["R09316"]') <| fn_gen(9316, 9317) | extend batch_id = 'R09316', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09316"]', ingestIfNotExists = '["FR09316"]') <| fn_flat_range(9316, 9317, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09317"]', ingestIfNotExists = '["R09317"]') <| fn_gen(9317, 9318) | extend batch_id = 'R09317', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09317"]', ingestIfNotExists = '["FR09317"]') <| fn_flat_range(9317, 9318, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09318"]', ingestIfNotExists = '["R09318"]') <| fn_gen(9318, 9319) | extend batch_id = 'R09318', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09318"]', ingestIfNotExists = '["FR09318"]') <| fn_flat_range(9318, 9319, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09319"]', ingestIfNotExists = '["R09319"]') <| fn_gen(9319, 9320) | extend batch_id = 'R09319', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09319"]', ingestIfNotExists = '["FR09319"]') <| fn_flat_range(9319, 9320, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09320"]', ingestIfNotExists = '["R09320"]') <| fn_gen(9320, 9321) | extend batch_id = 'R09320', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09320"]', ingestIfNotExists = '["FR09320"]') <| fn_flat_range(9320, 9321, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09321"]', ingestIfNotExists = '["R09321"]') <| fn_gen(9321, 9322) | extend batch_id = 'R09321', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09321"]', ingestIfNotExists = '["FR09321"]') <| fn_flat_range(9321, 9322, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09322"]', ingestIfNotExists = '["R09322"]') <| fn_gen(9322, 9323) | extend batch_id = 'R09322', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09322"]', ingestIfNotExists = '["FR09322"]') <| fn_flat_range(9322, 9323, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09323"]', ingestIfNotExists = '["R09323"]') <| fn_gen(9323, 9324) | extend batch_id = 'R09323', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09323"]', ingestIfNotExists = '["FR09323"]') <| fn_flat_range(9323, 9324, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09324"]', ingestIfNotExists = '["R09324"]') <| fn_gen(9324, 9325) | extend batch_id = 'R09324', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09324"]', ingestIfNotExists = '["FR09324"]') <| fn_flat_range(9324, 9325, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09325"]', ingestIfNotExists = '["R09325"]') <| fn_gen(9325, 9326) | extend batch_id = 'R09325', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09325"]', ingestIfNotExists = '["FR09325"]') <| fn_flat_range(9325, 9326, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09326"]', ingestIfNotExists = '["R09326"]') <| fn_gen(9326, 9327) | extend batch_id = 'R09326', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09326"]', ingestIfNotExists = '["FR09326"]') <| fn_flat_range(9326, 9327, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09327"]', ingestIfNotExists = '["R09327"]') <| fn_gen(9327, 9328) | extend batch_id = 'R09327', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09327"]', ingestIfNotExists = '["FR09327"]') <| fn_flat_range(9327, 9328, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09328"]', ingestIfNotExists = '["R09328"]') <| fn_gen(9328, 9329) | extend batch_id = 'R09328', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09328"]', ingestIfNotExists = '["FR09328"]') <| fn_flat_range(9328, 9329, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09329"]', ingestIfNotExists = '["R09329"]') <| fn_gen(9329, 9330) | extend batch_id = 'R09329', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09329"]', ingestIfNotExists = '["FR09329"]') <| fn_flat_range(9329, 9330, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09330"]', ingestIfNotExists = '["R09330"]') <| fn_gen(9330, 9331) | extend batch_id = 'R09330', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09330"]', ingestIfNotExists = '["FR09330"]') <| fn_flat_range(9330, 9331, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09331"]', ingestIfNotExists = '["R09331"]') <| fn_gen(9331, 9332) | extend batch_id = 'R09331', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09331"]', ingestIfNotExists = '["FR09331"]') <| fn_flat_range(9331, 9332, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09332"]', ingestIfNotExists = '["R09332"]') <| fn_gen(9332, 9333) | extend batch_id = 'R09332', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09332"]', ingestIfNotExists = '["FR09332"]') <| fn_flat_range(9332, 9333, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09333"]', ingestIfNotExists = '["R09333"]') <| fn_gen(9333, 9334) | extend batch_id = 'R09333', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09333"]', ingestIfNotExists = '["FR09333"]') <| fn_flat_range(9333, 9334, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09334"]', ingestIfNotExists = '["R09334"]') <| fn_gen(9334, 9335) | extend batch_id = 'R09334', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09334"]', ingestIfNotExists = '["FR09334"]') <| fn_flat_range(9334, 9335, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09335"]', ingestIfNotExists = '["R09335"]') <| fn_gen(9335, 9336) | extend batch_id = 'R09335', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09335"]', ingestIfNotExists = '["FR09335"]') <| fn_flat_range(9335, 9336, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09336"]', ingestIfNotExists = '["R09336"]') <| fn_gen(9336, 9337) | extend batch_id = 'R09336', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09336"]', ingestIfNotExists = '["FR09336"]') <| fn_flat_range(9336, 9337, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09337"]', ingestIfNotExists = '["R09337"]') <| fn_gen(9337, 9338) | extend batch_id = 'R09337', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09337"]', ingestIfNotExists = '["FR09337"]') <| fn_flat_range(9337, 9338, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09338"]', ingestIfNotExists = '["R09338"]') <| fn_gen(9338, 9339) | extend batch_id = 'R09338', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09338"]', ingestIfNotExists = '["FR09338"]') <| fn_flat_range(9338, 9339, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09339"]', ingestIfNotExists = '["R09339"]') <| fn_gen(9339, 9340) | extend batch_id = 'R09339', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09339"]', ingestIfNotExists = '["FR09339"]') <| fn_flat_range(9339, 9340, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09340"]', ingestIfNotExists = '["R09340"]') <| fn_gen(9340, 9341) | extend batch_id = 'R09340', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09340"]', ingestIfNotExists = '["FR09340"]') <| fn_flat_range(9340, 9341, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09341"]', ingestIfNotExists = '["R09341"]') <| fn_gen(9341, 9342) | extend batch_id = 'R09341', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09341"]', ingestIfNotExists = '["FR09341"]') <| fn_flat_range(9341, 9342, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09342"]', ingestIfNotExists = '["R09342"]') <| fn_gen(9342, 9343) | extend batch_id = 'R09342', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09342"]', ingestIfNotExists = '["FR09342"]') <| fn_flat_range(9342, 9343, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09343"]', ingestIfNotExists = '["R09343"]') <| fn_gen(9343, 9344) | extend batch_id = 'R09343', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09343"]', ingestIfNotExists = '["FR09343"]') <| fn_flat_range(9343, 9344, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09344"]', ingestIfNotExists = '["R09344"]') <| fn_gen(9344, 9345) | extend batch_id = 'R09344', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09344"]', ingestIfNotExists = '["FR09344"]') <| fn_flat_range(9344, 9345, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09345"]', ingestIfNotExists = '["R09345"]') <| fn_gen(9345, 9346) | extend batch_id = 'R09345', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09345"]', ingestIfNotExists = '["FR09345"]') <| fn_flat_range(9345, 9346, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09346"]', ingestIfNotExists = '["R09346"]') <| fn_gen(9346, 9347) | extend batch_id = 'R09346', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09346"]', ingestIfNotExists = '["FR09346"]') <| fn_flat_range(9346, 9347, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09347"]', ingestIfNotExists = '["R09347"]') <| fn_gen(9347, 9348) | extend batch_id = 'R09347', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09347"]', ingestIfNotExists = '["FR09347"]') <| fn_flat_range(9347, 9348, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09348"]', ingestIfNotExists = '["R09348"]') <| fn_gen(9348, 9349) | extend batch_id = 'R09348', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09348"]', ingestIfNotExists = '["FR09348"]') <| fn_flat_range(9348, 9349, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09349"]', ingestIfNotExists = '["R09349"]') <| fn_gen(9349, 9350) | extend batch_id = 'R09349', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09349"]', ingestIfNotExists = '["FR09349"]') <| fn_flat_range(9349, 9350, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09350"]', ingestIfNotExists = '["R09350"]') <| fn_gen(9350, 9351) | extend batch_id = 'R09350', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09350"]', ingestIfNotExists = '["FR09350"]') <| fn_flat_range(9350, 9351, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09351"]', ingestIfNotExists = '["R09351"]') <| fn_gen(9351, 9352) | extend batch_id = 'R09351', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09351"]', ingestIfNotExists = '["FR09351"]') <| fn_flat_range(9351, 9352, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09352"]', ingestIfNotExists = '["R09352"]') <| fn_gen(9352, 9353) | extend batch_id = 'R09352', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09352"]', ingestIfNotExists = '["FR09352"]') <| fn_flat_range(9352, 9353, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09353"]', ingestIfNotExists = '["R09353"]') <| fn_gen(9353, 9354) | extend batch_id = 'R09353', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09353"]', ingestIfNotExists = '["FR09353"]') <| fn_flat_range(9353, 9354, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09354"]', ingestIfNotExists = '["R09354"]') <| fn_gen(9354, 9355) | extend batch_id = 'R09354', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09354"]', ingestIfNotExists = '["FR09354"]') <| fn_flat_range(9354, 9355, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09355"]', ingestIfNotExists = '["R09355"]') <| fn_gen(9355, 9356) | extend batch_id = 'R09355', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09355"]', ingestIfNotExists = '["FR09355"]') <| fn_flat_range(9355, 9356, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09356"]', ingestIfNotExists = '["R09356"]') <| fn_gen(9356, 9357) | extend batch_id = 'R09356', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09356"]', ingestIfNotExists = '["FR09356"]') <| fn_flat_range(9356, 9357, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09357"]', ingestIfNotExists = '["R09357"]') <| fn_gen(9357, 9358) | extend batch_id = 'R09357', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09357"]', ingestIfNotExists = '["FR09357"]') <| fn_flat_range(9357, 9358, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09358"]', ingestIfNotExists = '["R09358"]') <| fn_gen(9358, 9359) | extend batch_id = 'R09358', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09358"]', ingestIfNotExists = '["FR09358"]') <| fn_flat_range(9358, 9359, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09359"]', ingestIfNotExists = '["R09359"]') <| fn_gen(9359, 9360) | extend batch_id = 'R09359', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09359"]', ingestIfNotExists = '["FR09359"]') <| fn_flat_range(9359, 9360, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09360"]', ingestIfNotExists = '["R09360"]') <| fn_gen(9360, 9361) | extend batch_id = 'R09360', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09360"]', ingestIfNotExists = '["FR09360"]') <| fn_flat_range(9360, 9361, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09361"]', ingestIfNotExists = '["R09361"]') <| fn_gen(9361, 9362) | extend batch_id = 'R09361', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09361"]', ingestIfNotExists = '["FR09361"]') <| fn_flat_range(9361, 9362, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09362"]', ingestIfNotExists = '["R09362"]') <| fn_gen(9362, 9363) | extend batch_id = 'R09362', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09362"]', ingestIfNotExists = '["FR09362"]') <| fn_flat_range(9362, 9363, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09363"]', ingestIfNotExists = '["R09363"]') <| fn_gen(9363, 9364) | extend batch_id = 'R09363', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09363"]', ingestIfNotExists = '["FR09363"]') <| fn_flat_range(9363, 9364, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09364"]', ingestIfNotExists = '["R09364"]') <| fn_gen(9364, 9365) | extend batch_id = 'R09364', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09364"]', ingestIfNotExists = '["FR09364"]') <| fn_flat_range(9364, 9365, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09365"]', ingestIfNotExists = '["R09365"]') <| fn_gen(9365, 9366) | extend batch_id = 'R09365', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09365"]', ingestIfNotExists = '["FR09365"]') <| fn_flat_range(9365, 9366, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09366"]', ingestIfNotExists = '["R09366"]') <| fn_gen(9366, 9367) | extend batch_id = 'R09366', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09366"]', ingestIfNotExists = '["FR09366"]') <| fn_flat_range(9366, 9367, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09367"]', ingestIfNotExists = '["R09367"]') <| fn_gen(9367, 9368) | extend batch_id = 'R09367', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09367"]', ingestIfNotExists = '["FR09367"]') <| fn_flat_range(9367, 9368, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09368"]', ingestIfNotExists = '["R09368"]') <| fn_gen(9368, 9369) | extend batch_id = 'R09368', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09368"]', ingestIfNotExists = '["FR09368"]') <| fn_flat_range(9368, 9369, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09369"]', ingestIfNotExists = '["R09369"]') <| fn_gen(9369, 9370) | extend batch_id = 'R09369', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09369"]', ingestIfNotExists = '["FR09369"]') <| fn_flat_range(9369, 9370, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09370"]', ingestIfNotExists = '["R09370"]') <| fn_gen(9370, 9371) | extend batch_id = 'R09370', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09370"]', ingestIfNotExists = '["FR09370"]') <| fn_flat_range(9370, 9371, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09371"]', ingestIfNotExists = '["R09371"]') <| fn_gen(9371, 9372) | extend batch_id = 'R09371', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09371"]', ingestIfNotExists = '["FR09371"]') <| fn_flat_range(9371, 9372, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09372"]', ingestIfNotExists = '["R09372"]') <| fn_gen(9372, 9373) | extend batch_id = 'R09372', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09372"]', ingestIfNotExists = '["FR09372"]') <| fn_flat_range(9372, 9373, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09373"]', ingestIfNotExists = '["R09373"]') <| fn_gen(9373, 9374) | extend batch_id = 'R09373', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09373"]', ingestIfNotExists = '["FR09373"]') <| fn_flat_range(9373, 9374, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09374"]', ingestIfNotExists = '["R09374"]') <| fn_gen(9374, 9375) | extend batch_id = 'R09374', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09374"]', ingestIfNotExists = '["FR09374"]') <| fn_flat_range(9374, 9375, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09375"]', ingestIfNotExists = '["R09375"]') <| fn_gen(9375, 9376) | extend batch_id = 'R09375', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09375"]', ingestIfNotExists = '["FR09375"]') <| fn_flat_range(9375, 9376, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09376"]', ingestIfNotExists = '["R09376"]') <| fn_gen(9376, 9377) | extend batch_id = 'R09376', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09376"]', ingestIfNotExists = '["FR09376"]') <| fn_flat_range(9376, 9377, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09377"]', ingestIfNotExists = '["R09377"]') <| fn_gen(9377, 9378) | extend batch_id = 'R09377', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09377"]', ingestIfNotExists = '["FR09377"]') <| fn_flat_range(9377, 9378, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09378"]', ingestIfNotExists = '["R09378"]') <| fn_gen(9378, 9379) | extend batch_id = 'R09378', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09378"]', ingestIfNotExists = '["FR09378"]') <| fn_flat_range(9378, 9379, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09379"]', ingestIfNotExists = '["R09379"]') <| fn_gen(9379, 9380) | extend batch_id = 'R09379', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09379"]', ingestIfNotExists = '["FR09379"]') <| fn_flat_range(9379, 9380, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09380"]', ingestIfNotExists = '["R09380"]') <| fn_gen(9380, 9381) | extend batch_id = 'R09380', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09380"]', ingestIfNotExists = '["FR09380"]') <| fn_flat_range(9380, 9381, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09381"]', ingestIfNotExists = '["R09381"]') <| fn_gen(9381, 9382) | extend batch_id = 'R09381', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09381"]', ingestIfNotExists = '["FR09381"]') <| fn_flat_range(9381, 9382, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09382"]', ingestIfNotExists = '["R09382"]') <| fn_gen(9382, 9383) | extend batch_id = 'R09382', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09382"]', ingestIfNotExists = '["FR09382"]') <| fn_flat_range(9382, 9383, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09383"]', ingestIfNotExists = '["R09383"]') <| fn_gen(9383, 9384) | extend batch_id = 'R09383', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09383"]', ingestIfNotExists = '["FR09383"]') <| fn_flat_range(9383, 9384, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09384"]', ingestIfNotExists = '["R09384"]') <| fn_gen(9384, 9385) | extend batch_id = 'R09384', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09384"]', ingestIfNotExists = '["FR09384"]') <| fn_flat_range(9384, 9385, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09385"]', ingestIfNotExists = '["R09385"]') <| fn_gen(9385, 9386) | extend batch_id = 'R09385', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09385"]', ingestIfNotExists = '["FR09385"]') <| fn_flat_range(9385, 9386, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09386"]', ingestIfNotExists = '["R09386"]') <| fn_gen(9386, 9387) | extend batch_id = 'R09386', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09386"]', ingestIfNotExists = '["FR09386"]') <| fn_flat_range(9386, 9387, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09387"]', ingestIfNotExists = '["R09387"]') <| fn_gen(9387, 9388) | extend batch_id = 'R09387', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09387"]', ingestIfNotExists = '["FR09387"]') <| fn_flat_range(9387, 9388, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09388"]', ingestIfNotExists = '["R09388"]') <| fn_gen(9388, 9389) | extend batch_id = 'R09388', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09388"]', ingestIfNotExists = '["FR09388"]') <| fn_flat_range(9388, 9389, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09389"]', ingestIfNotExists = '["R09389"]') <| fn_gen(9389, 9390) | extend batch_id = 'R09389', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09389"]', ingestIfNotExists = '["FR09389"]') <| fn_flat_range(9389, 9390, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09390"]', ingestIfNotExists = '["R09390"]') <| fn_gen(9390, 9391) | extend batch_id = 'R09390', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09390"]', ingestIfNotExists = '["FR09390"]') <| fn_flat_range(9390, 9391, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09391"]', ingestIfNotExists = '["R09391"]') <| fn_gen(9391, 9392) | extend batch_id = 'R09391', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09391"]', ingestIfNotExists = '["FR09391"]') <| fn_flat_range(9391, 9392, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09392"]', ingestIfNotExists = '["R09392"]') <| fn_gen(9392, 9393) | extend batch_id = 'R09392', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09392"]', ingestIfNotExists = '["FR09392"]') <| fn_flat_range(9392, 9393, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09393"]', ingestIfNotExists = '["R09393"]') <| fn_gen(9393, 9394) | extend batch_id = 'R09393', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09393"]', ingestIfNotExists = '["FR09393"]') <| fn_flat_range(9393, 9394, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09394"]', ingestIfNotExists = '["R09394"]') <| fn_gen(9394, 9395) | extend batch_id = 'R09394', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09394"]', ingestIfNotExists = '["FR09394"]') <| fn_flat_range(9394, 9395, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09395"]', ingestIfNotExists = '["R09395"]') <| fn_gen(9395, 9396) | extend batch_id = 'R09395', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09395"]', ingestIfNotExists = '["FR09395"]') <| fn_flat_range(9395, 9396, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09396"]', ingestIfNotExists = '["R09396"]') <| fn_gen(9396, 9397) | extend batch_id = 'R09396', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09396"]', ingestIfNotExists = '["FR09396"]') <| fn_flat_range(9396, 9397, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09397"]', ingestIfNotExists = '["R09397"]') <| fn_gen(9397, 9398) | extend batch_id = 'R09397', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09397"]', ingestIfNotExists = '["FR09397"]') <| fn_flat_range(9397, 9398, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09398"]', ingestIfNotExists = '["R09398"]') <| fn_gen(9398, 9399) | extend batch_id = 'R09398', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09398"]', ingestIfNotExists = '["FR09398"]') <| fn_flat_range(9398, 9399, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09399"]', ingestIfNotExists = '["R09399"]') <| fn_gen(9399, 9400) | extend batch_id = 'R09399', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09399"]', ingestIfNotExists = '["FR09399"]') <| fn_flat_range(9399, 9400, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09400"]', ingestIfNotExists = '["R09400"]') <| fn_gen(9400, 9401) | extend batch_id = 'R09400', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09400"]', ingestIfNotExists = '["FR09400"]') <| fn_flat_range(9400, 9401, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09401"]', ingestIfNotExists = '["R09401"]') <| fn_gen(9401, 9402) | extend batch_id = 'R09401', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09401"]', ingestIfNotExists = '["FR09401"]') <| fn_flat_range(9401, 9402, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09402"]', ingestIfNotExists = '["R09402"]') <| fn_gen(9402, 9403) | extend batch_id = 'R09402', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09402"]', ingestIfNotExists = '["FR09402"]') <| fn_flat_range(9402, 9403, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09403"]', ingestIfNotExists = '["R09403"]') <| fn_gen(9403, 9404) | extend batch_id = 'R09403', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09403"]', ingestIfNotExists = '["FR09403"]') <| fn_flat_range(9403, 9404, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09404"]', ingestIfNotExists = '["R09404"]') <| fn_gen(9404, 9405) | extend batch_id = 'R09404', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09404"]', ingestIfNotExists = '["FR09404"]') <| fn_flat_range(9404, 9405, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09405"]', ingestIfNotExists = '["R09405"]') <| fn_gen(9405, 9406) | extend batch_id = 'R09405', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09405"]', ingestIfNotExists = '["FR09405"]') <| fn_flat_range(9405, 9406, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09406"]', ingestIfNotExists = '["R09406"]') <| fn_gen(9406, 9407) | extend batch_id = 'R09406', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09406"]', ingestIfNotExists = '["FR09406"]') <| fn_flat_range(9406, 9407, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09407"]', ingestIfNotExists = '["R09407"]') <| fn_gen(9407, 9408) | extend batch_id = 'R09407', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09407"]', ingestIfNotExists = '["FR09407"]') <| fn_flat_range(9407, 9408, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09408"]', ingestIfNotExists = '["R09408"]') <| fn_gen(9408, 9409) | extend batch_id = 'R09408', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09408"]', ingestIfNotExists = '["FR09408"]') <| fn_flat_range(9408, 9409, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09409"]', ingestIfNotExists = '["R09409"]') <| fn_gen(9409, 9410) | extend batch_id = 'R09409', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09409"]', ingestIfNotExists = '["FR09409"]') <| fn_flat_range(9409, 9410, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09410"]', ingestIfNotExists = '["R09410"]') <| fn_gen(9410, 9411) | extend batch_id = 'R09410', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09410"]', ingestIfNotExists = '["FR09410"]') <| fn_flat_range(9410, 9411, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09411"]', ingestIfNotExists = '["R09411"]') <| fn_gen(9411, 9412) | extend batch_id = 'R09411', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09411"]', ingestIfNotExists = '["FR09411"]') <| fn_flat_range(9411, 9412, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09412"]', ingestIfNotExists = '["R09412"]') <| fn_gen(9412, 9413) | extend batch_id = 'R09412', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09412"]', ingestIfNotExists = '["FR09412"]') <| fn_flat_range(9412, 9413, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09413"]', ingestIfNotExists = '["R09413"]') <| fn_gen(9413, 9414) | extend batch_id = 'R09413', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09413"]', ingestIfNotExists = '["FR09413"]') <| fn_flat_range(9413, 9414, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09414"]', ingestIfNotExists = '["R09414"]') <| fn_gen(9414, 9415) | extend batch_id = 'R09414', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09414"]', ingestIfNotExists = '["FR09414"]') <| fn_flat_range(9414, 9415, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09415"]', ingestIfNotExists = '["R09415"]') <| fn_gen(9415, 9416) | extend batch_id = 'R09415', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09415"]', ingestIfNotExists = '["FR09415"]') <| fn_flat_range(9415, 9416, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09416"]', ingestIfNotExists = '["R09416"]') <| fn_gen(9416, 9417) | extend batch_id = 'R09416', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09416"]', ingestIfNotExists = '["FR09416"]') <| fn_flat_range(9416, 9417, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09417"]', ingestIfNotExists = '["R09417"]') <| fn_gen(9417, 9418) | extend batch_id = 'R09417', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09417"]', ingestIfNotExists = '["FR09417"]') <| fn_flat_range(9417, 9418, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09418"]', ingestIfNotExists = '["R09418"]') <| fn_gen(9418, 9419) | extend batch_id = 'R09418', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09418"]', ingestIfNotExists = '["FR09418"]') <| fn_flat_range(9418, 9419, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09419"]', ingestIfNotExists = '["R09419"]') <| fn_gen(9419, 9420) | extend batch_id = 'R09419', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09419"]', ingestIfNotExists = '["FR09419"]') <| fn_flat_range(9419, 9420, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09420"]', ingestIfNotExists = '["R09420"]') <| fn_gen(9420, 9421) | extend batch_id = 'R09420', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09420"]', ingestIfNotExists = '["FR09420"]') <| fn_flat_range(9420, 9421, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09421"]', ingestIfNotExists = '["R09421"]') <| fn_gen(9421, 9422) | extend batch_id = 'R09421', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09421"]', ingestIfNotExists = '["FR09421"]') <| fn_flat_range(9421, 9422, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09422"]', ingestIfNotExists = '["R09422"]') <| fn_gen(9422, 9423) | extend batch_id = 'R09422', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09422"]', ingestIfNotExists = '["FR09422"]') <| fn_flat_range(9422, 9423, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09423"]', ingestIfNotExists = '["R09423"]') <| fn_gen(9423, 9424) | extend batch_id = 'R09423', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09423"]', ingestIfNotExists = '["FR09423"]') <| fn_flat_range(9423, 9424, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09424"]', ingestIfNotExists = '["R09424"]') <| fn_gen(9424, 9425) | extend batch_id = 'R09424', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09424"]', ingestIfNotExists = '["FR09424"]') <| fn_flat_range(9424, 9425, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09425"]', ingestIfNotExists = '["R09425"]') <| fn_gen(9425, 9426) | extend batch_id = 'R09425', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09425"]', ingestIfNotExists = '["FR09425"]') <| fn_flat_range(9425, 9426, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09426"]', ingestIfNotExists = '["R09426"]') <| fn_gen(9426, 9427) | extend batch_id = 'R09426', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09426"]', ingestIfNotExists = '["FR09426"]') <| fn_flat_range(9426, 9427, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09427"]', ingestIfNotExists = '["R09427"]') <| fn_gen(9427, 9428) | extend batch_id = 'R09427', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09427"]', ingestIfNotExists = '["FR09427"]') <| fn_flat_range(9427, 9428, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09428"]', ingestIfNotExists = '["R09428"]') <| fn_gen(9428, 9429) | extend batch_id = 'R09428', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09428"]', ingestIfNotExists = '["FR09428"]') <| fn_flat_range(9428, 9429, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09429"]', ingestIfNotExists = '["R09429"]') <| fn_gen(9429, 9430) | extend batch_id = 'R09429', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09429"]', ingestIfNotExists = '["FR09429"]') <| fn_flat_range(9429, 9430, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09430"]', ingestIfNotExists = '["R09430"]') <| fn_gen(9430, 9431) | extend batch_id = 'R09430', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09430"]', ingestIfNotExists = '["FR09430"]') <| fn_flat_range(9430, 9431, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09431"]', ingestIfNotExists = '["R09431"]') <| fn_gen(9431, 9432) | extend batch_id = 'R09431', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09431"]', ingestIfNotExists = '["FR09431"]') <| fn_flat_range(9431, 9432, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09432"]', ingestIfNotExists = '["R09432"]') <| fn_gen(9432, 9433) | extend batch_id = 'R09432', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09432"]', ingestIfNotExists = '["FR09432"]') <| fn_flat_range(9432, 9433, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09433"]', ingestIfNotExists = '["R09433"]') <| fn_gen(9433, 9434) | extend batch_id = 'R09433', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09433"]', ingestIfNotExists = '["FR09433"]') <| fn_flat_range(9433, 9434, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09434"]', ingestIfNotExists = '["R09434"]') <| fn_gen(9434, 9435) | extend batch_id = 'R09434', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09434"]', ingestIfNotExists = '["FR09434"]') <| fn_flat_range(9434, 9435, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09435"]', ingestIfNotExists = '["R09435"]') <| fn_gen(9435, 9436) | extend batch_id = 'R09435', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09435"]', ingestIfNotExists = '["FR09435"]') <| fn_flat_range(9435, 9436, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09436"]', ingestIfNotExists = '["R09436"]') <| fn_gen(9436, 9437) | extend batch_id = 'R09436', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09436"]', ingestIfNotExists = '["FR09436"]') <| fn_flat_range(9436, 9437, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09437"]', ingestIfNotExists = '["R09437"]') <| fn_gen(9437, 9438) | extend batch_id = 'R09437', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09437"]', ingestIfNotExists = '["FR09437"]') <| fn_flat_range(9437, 9438, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09438"]', ingestIfNotExists = '["R09438"]') <| fn_gen(9438, 9439) | extend batch_id = 'R09438', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09438"]', ingestIfNotExists = '["FR09438"]') <| fn_flat_range(9438, 9439, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09439"]', ingestIfNotExists = '["R09439"]') <| fn_gen(9439, 9440) | extend batch_id = 'R09439', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09439"]', ingestIfNotExists = '["FR09439"]') <| fn_flat_range(9439, 9440, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09440"]', ingestIfNotExists = '["R09440"]') <| fn_gen(9440, 9441) | extend batch_id = 'R09440', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09440"]', ingestIfNotExists = '["FR09440"]') <| fn_flat_range(9440, 9441, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09441"]', ingestIfNotExists = '["R09441"]') <| fn_gen(9441, 9442) | extend batch_id = 'R09441', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09441"]', ingestIfNotExists = '["FR09441"]') <| fn_flat_range(9441, 9442, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09442"]', ingestIfNotExists = '["R09442"]') <| fn_gen(9442, 9443) | extend batch_id = 'R09442', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09442"]', ingestIfNotExists = '["FR09442"]') <| fn_flat_range(9442, 9443, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09443"]', ingestIfNotExists = '["R09443"]') <| fn_gen(9443, 9444) | extend batch_id = 'R09443', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09443"]', ingestIfNotExists = '["FR09443"]') <| fn_flat_range(9443, 9444, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09444"]', ingestIfNotExists = '["R09444"]') <| fn_gen(9444, 9445) | extend batch_id = 'R09444', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09444"]', ingestIfNotExists = '["FR09444"]') <| fn_flat_range(9444, 9445, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09445"]', ingestIfNotExists = '["R09445"]') <| fn_gen(9445, 9446) | extend batch_id = 'R09445', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09445"]', ingestIfNotExists = '["FR09445"]') <| fn_flat_range(9445, 9446, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09446"]', ingestIfNotExists = '["R09446"]') <| fn_gen(9446, 9447) | extend batch_id = 'R09446', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09446"]', ingestIfNotExists = '["FR09446"]') <| fn_flat_range(9446, 9447, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09447"]', ingestIfNotExists = '["R09447"]') <| fn_gen(9447, 9448) | extend batch_id = 'R09447', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09447"]', ingestIfNotExists = '["FR09447"]') <| fn_flat_range(9447, 9448, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09448"]', ingestIfNotExists = '["R09448"]') <| fn_gen(9448, 9449) | extend batch_id = 'R09448', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09448"]', ingestIfNotExists = '["FR09448"]') <| fn_flat_range(9448, 9449, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09449"]', ingestIfNotExists = '["R09449"]') <| fn_gen(9449, 9450) | extend batch_id = 'R09449', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09449"]', ingestIfNotExists = '["FR09449"]') <| fn_flat_range(9449, 9450, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09450"]', ingestIfNotExists = '["R09450"]') <| fn_gen(9450, 9451) | extend batch_id = 'R09450', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09450"]', ingestIfNotExists = '["FR09450"]') <| fn_flat_range(9450, 9451, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09451"]', ingestIfNotExists = '["R09451"]') <| fn_gen(9451, 9452) | extend batch_id = 'R09451', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09451"]', ingestIfNotExists = '["FR09451"]') <| fn_flat_range(9451, 9452, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09452"]', ingestIfNotExists = '["R09452"]') <| fn_gen(9452, 9453) | extend batch_id = 'R09452', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09452"]', ingestIfNotExists = '["FR09452"]') <| fn_flat_range(9452, 9453, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09453"]', ingestIfNotExists = '["R09453"]') <| fn_gen(9453, 9454) | extend batch_id = 'R09453', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09453"]', ingestIfNotExists = '["FR09453"]') <| fn_flat_range(9453, 9454, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09454"]', ingestIfNotExists = '["R09454"]') <| fn_gen(9454, 9455) | extend batch_id = 'R09454', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09454"]', ingestIfNotExists = '["FR09454"]') <| fn_flat_range(9454, 9455, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09455"]', ingestIfNotExists = '["R09455"]') <| fn_gen(9455, 9456) | extend batch_id = 'R09455', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09455"]', ingestIfNotExists = '["FR09455"]') <| fn_flat_range(9455, 9456, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09456"]', ingestIfNotExists = '["R09456"]') <| fn_gen(9456, 9457) | extend batch_id = 'R09456', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09456"]', ingestIfNotExists = '["FR09456"]') <| fn_flat_range(9456, 9457, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09457"]', ingestIfNotExists = '["R09457"]') <| fn_gen(9457, 9458) | extend batch_id = 'R09457', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09457"]', ingestIfNotExists = '["FR09457"]') <| fn_flat_range(9457, 9458, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09458"]', ingestIfNotExists = '["R09458"]') <| fn_gen(9458, 9459) | extend batch_id = 'R09458', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09458"]', ingestIfNotExists = '["FR09458"]') <| fn_flat_range(9458, 9459, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09459"]', ingestIfNotExists = '["R09459"]') <| fn_gen(9459, 9460) | extend batch_id = 'R09459', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09459"]', ingestIfNotExists = '["FR09459"]') <| fn_flat_range(9459, 9460, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09460"]', ingestIfNotExists = '["R09460"]') <| fn_gen(9460, 9461) | extend batch_id = 'R09460', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09460"]', ingestIfNotExists = '["FR09460"]') <| fn_flat_range(9460, 9461, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09461"]', ingestIfNotExists = '["R09461"]') <| fn_gen(9461, 9462) | extend batch_id = 'R09461', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09461"]', ingestIfNotExists = '["FR09461"]') <| fn_flat_range(9461, 9462, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09462"]', ingestIfNotExists = '["R09462"]') <| fn_gen(9462, 9463) | extend batch_id = 'R09462', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09462"]', ingestIfNotExists = '["FR09462"]') <| fn_flat_range(9462, 9463, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09463"]', ingestIfNotExists = '["R09463"]') <| fn_gen(9463, 9464) | extend batch_id = 'R09463', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09463"]', ingestIfNotExists = '["FR09463"]') <| fn_flat_range(9463, 9464, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09464"]', ingestIfNotExists = '["R09464"]') <| fn_gen(9464, 9465) | extend batch_id = 'R09464', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09464"]', ingestIfNotExists = '["FR09464"]') <| fn_flat_range(9464, 9465, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09465"]', ingestIfNotExists = '["R09465"]') <| fn_gen(9465, 9466) | extend batch_id = 'R09465', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09465"]', ingestIfNotExists = '["FR09465"]') <| fn_flat_range(9465, 9466, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09466"]', ingestIfNotExists = '["R09466"]') <| fn_gen(9466, 9467) | extend batch_id = 'R09466', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09466"]', ingestIfNotExists = '["FR09466"]') <| fn_flat_range(9466, 9467, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09467"]', ingestIfNotExists = '["R09467"]') <| fn_gen(9467, 9468) | extend batch_id = 'R09467', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09467"]', ingestIfNotExists = '["FR09467"]') <| fn_flat_range(9467, 9468, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09468"]', ingestIfNotExists = '["R09468"]') <| fn_gen(9468, 9469) | extend batch_id = 'R09468', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09468"]', ingestIfNotExists = '["FR09468"]') <| fn_flat_range(9468, 9469, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09469"]', ingestIfNotExists = '["R09469"]') <| fn_gen(9469, 9470) | extend batch_id = 'R09469', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09469"]', ingestIfNotExists = '["FR09469"]') <| fn_flat_range(9469, 9470, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09470"]', ingestIfNotExists = '["R09470"]') <| fn_gen(9470, 9471) | extend batch_id = 'R09470', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09470"]', ingestIfNotExists = '["FR09470"]') <| fn_flat_range(9470, 9471, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09471"]', ingestIfNotExists = '["R09471"]') <| fn_gen(9471, 9472) | extend batch_id = 'R09471', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09471"]', ingestIfNotExists = '["FR09471"]') <| fn_flat_range(9471, 9472, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09472"]', ingestIfNotExists = '["R09472"]') <| fn_gen(9472, 9473) | extend batch_id = 'R09472', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09472"]', ingestIfNotExists = '["FR09472"]') <| fn_flat_range(9472, 9473, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09473"]', ingestIfNotExists = '["R09473"]') <| fn_gen(9473, 9474) | extend batch_id = 'R09473', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09473"]', ingestIfNotExists = '["FR09473"]') <| fn_flat_range(9473, 9474, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09474"]', ingestIfNotExists = '["R09474"]') <| fn_gen(9474, 9475) | extend batch_id = 'R09474', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09474"]', ingestIfNotExists = '["FR09474"]') <| fn_flat_range(9474, 9475, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09475"]', ingestIfNotExists = '["R09475"]') <| fn_gen(9475, 9476) | extend batch_id = 'R09475', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09475"]', ingestIfNotExists = '["FR09475"]') <| fn_flat_range(9475, 9476, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09476"]', ingestIfNotExists = '["R09476"]') <| fn_gen(9476, 9477) | extend batch_id = 'R09476', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09476"]', ingestIfNotExists = '["FR09476"]') <| fn_flat_range(9476, 9477, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09477"]', ingestIfNotExists = '["R09477"]') <| fn_gen(9477, 9478) | extend batch_id = 'R09477', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09477"]', ingestIfNotExists = '["FR09477"]') <| fn_flat_range(9477, 9478, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09478"]', ingestIfNotExists = '["R09478"]') <| fn_gen(9478, 9479) | extend batch_id = 'R09478', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09478"]', ingestIfNotExists = '["FR09478"]') <| fn_flat_range(9478, 9479, 'Hourly scan')
+//--
+.set-or-append meter_reading with (tags = '["ingest-by:R09479"]', ingestIfNotExists = '["R09479"]') <| fn_gen(9479, 9480) | extend batch_id = 'R09479', loaded_at = now()
+//--
+.set-or-append reading_alert with (tags = '["ingest-by:FR09479"]', ingestIfNotExists = '["FR09479"]') <| fn_flat_range(9479, 9480, 'Hourly scan')

@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "NB_SinarLembah_Seed",
+    "description": "P37 seed: builds the KQL schema and generates the data when the KQL database is empty (deployment plan post-action)."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "37a00000-0000-4000-8000-0000000000a3"
+  }
+}

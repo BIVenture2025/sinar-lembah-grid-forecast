@@ -1,0 +1,220 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "Dict",
+  "position": {
+    "x": 636,
+    "y": 100,
+    "z": 1200,
+    "height": 404,
+    "width": 620,
+    "tabOrder": 610
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Data dictionary",
+                    "textStyle": {
+                      "fontSize": "14pt",
+                      "color": "#27221F",
+                      "fontWeight": "bold"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Reading: one row per feeder per hour, scored against the usual load (Eventhouse table reading_scored, by shortcut).",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#27221F"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Alert: one row per alert hour, with its incident and cause (Lakehouse gold_alert).",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#27221F"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Forecast: one row per feeder per hour for the backtest and the forecast day, with the range (gold_forecast_hourly).",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#27221F"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Forecast group: the same for each substation and for all feeders, with their own ranges (gold_forecast_group).",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#27221F"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Planted event: the generator's answer key, graded (gold_event_grade).",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#27221F"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Model metric and Detector metric: backtest and detector figures with their intervals (gold_model_metric, gold_detector_metric).",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#27221F"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Feeder, Date, Hour: feeders and their main distribution substation; calendar with day type and public holidays for Kuala Lumpur and Selangor; hours.",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#27221F"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFB'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#E1DACB'"
+                    }
+                  }
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "padding": [
+        {
+          "properties": {
+            "left": {
+              "expr": {
+                "Literal": {
+                  "Value": "14L"
+                }
+              }
+            },
+            "right": {
+              "expr": {
+                "Literal": {
+                  "Value": "14L"
+                }
+              }
+            },
+            "top": {
+              "expr": {
+                "Literal": {
+                  "Value": "10L"
+                }
+              }
+            },
+            "bottom": {
+              "expr": {
+                "Literal": {
+                  "Value": "10L"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

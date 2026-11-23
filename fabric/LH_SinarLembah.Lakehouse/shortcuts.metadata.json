@@ -1,0 +1,98 @@
+[
+  {
+    "name": "meter_reading",
+    "path": "/Tables",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/meter_reading",
+        "itemId": "aaaaaaaa-0000-4000-8000-000000000003",
+        "workspaceId": "aaaaaaaa-0000-4000-8000-000000000001"
+      }
+    }
+  },
+  {
+    "name": "reading_scored",
+    "path": "/Tables",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/reading_scored",
+        "itemId": "aaaaaaaa-0000-4000-8000-000000000003",
+        "workspaceId": "aaaaaaaa-0000-4000-8000-000000000001"
+      }
+    }
+  },
+  {
+    "name": "reading_alert",
+    "path": "/Tables",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/reading_alert",
+        "itemId": "aaaaaaaa-0000-4000-8000-000000000003",
+        "workspaceId": "aaaaaaaa-0000-4000-8000-000000000001"
+      }
+    }
+  },
+  {
+    "name": "feeder",
+    "path": "/Tables",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/feeder",
+        "itemId": "aaaaaaaa-0000-4000-8000-000000000003",
+        "workspaceId": "aaaaaaaa-0000-4000-8000-000000000001"
+      }
+    }
+  },
+  {
+    "name": "planted_event",
+    "path": "/Tables",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/planted_event",
+        "itemId": "aaaaaaaa-0000-4000-8000-000000000003",
+        "workspaceId": "aaaaaaaa-0000-4000-8000-000000000001"
+      }
+    }
+  },
+  {
+    "name": "switching_log",
+    "path": "/Tables",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/switching_log",
+        "itemId": "aaaaaaaa-0000-4000-8000-000000000003",
+        "workspaceId": "aaaaaaaa-0000-4000-8000-000000000001"
+      }
+    }
+  },
+  {
+    "name": "calendar_day",
+    "path": "/Tables",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/calendar_day",
+        "itemId": "aaaaaaaa-0000-4000-8000-000000000003",
+        "workspaceId": "aaaaaaaa-0000-4000-8000-000000000001"
+      }
+    }
+  },
+  {
+    "name": "weather_hourly",
+    "path": "/Tables",
+    "target": {
+      "type": "OneLake",
+      "oneLake": {
+        "path": "Tables/weather_hourly",
+        "itemId": "aaaaaaaa-0000-4000-8000-000000000003",
+        "workspaceId": "aaaaaaaa-0000-4000-8000-000000000001"
+      }
+    }
+  }
+]

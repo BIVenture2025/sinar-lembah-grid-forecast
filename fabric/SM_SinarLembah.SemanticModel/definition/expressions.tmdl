@@ -1,0 +1,7 @@
+/// Direct Lake binding to LH_SinarLembah via OneLake (Lakehouse without schemas; shape from P30 and P34).
+expression 'DirectLake - LH_SinarLembah' =
+		let
+		    Source = AzureStorage.DataLake("https://onelake.dfs.fabric.microsoft.com/aaaaaaaa-0000-4000-8000-000000000001/aaaaaaaa-0000-4000-8000-000000000002", [HierarchicalNavigation=true])
+		in
+		    Source
+

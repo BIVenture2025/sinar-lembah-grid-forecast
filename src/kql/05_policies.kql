@@ -1,0 +1,3 @@
+.alter table reading_scored policy update @'[{"IsEnabled": true, "Source": "meter_reading", "Query": "fn_score_policy()", "IsTransactional": true, "PropagateIngestionProperties": true}]'
+//--
+.alter table reading_alert policy update @'[{"IsEnabled": true, "Source": "reading_scored", "Query": "fn_alert_policy()", "IsTransactional": true, "PropagateIngestionProperties": true}]'

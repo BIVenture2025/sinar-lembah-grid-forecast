@@ -1,0 +1,29 @@
+.create-merge table weather_hourly (hour_index:long, reading_hour:datetime, reading_date:datetime, hour_of_day:long, temp_c:real, temp_fc_c:real) with (folder = "reference")
+//--
+.alter table weather_hourly policy mirroring dataformat=parquet with (IsEnabled=true, TargetLatencyInMinutes=5)
+//--
+.create-or-alter function with (folder = "gen", docstring = "Hourly weather in [from_index, to_index): actual temperature and its day-ahead forecast (gen_oracle.weather)", skipvalidation = "true") fn_weather(from_index:long, to_index:long) {
+    range hour_index from from_index to to_index - 1 step 1
+    | extend day_index = hour_index / 24, hour_of_day = hour_index % 24
+    | lookup kind=inner calendar_day on day_index
+    | extend tnoise = (fn_u(day_index, 1, 11) - 0.5) * 2.4, rain = fn_u(day_index, 2, 13) < 0.35
+    | lookup kind=inner month_temp on month
+    | lookup kind=inner hour_temp on hour_of_day
+    | extend off = iff(rain and hour_of_day >= 13 and hour_of_day <= 18, hour_offset * 0.4, hour_offset)
+    | extend temp_c = mean_c + tnoise + off
+    | extend temp_fc_c = temp_c + (fn_u(day_index, 5, 53) - 0.5) * 2.0 + (fn_u(hour_index, 6, 59) - 0.5) * 0.6
+    | extend reading_hour = datetime(2025-10-24) + hour_index * 1h
+    | project hour_index, reading_hour, reading_date = startofday(reading_hour), hour_of_day, temp_c, temp_fc_c
+}
+//--
+.set-or-append weather_hourly with (tags = '["ingest-by:WX"]', ingestIfNotExists = '["WX"]') <| fn_weather(0, 9504)
+//--
+.set-or-append planted_event with (tags = '["ingest-by:EV_WEAK"]', ingestIfNotExists = '["EV_WEAK"]') <| datatable(event_id:string, feeder_id:string, event_type:string, start_index:long, end_index:long, start_hour:datetime, end_hour:datetime, start_date:datetime, factor:real, stuck_mw:real) [
+  'E062', 'F12', 'Spike', long(9350), long(9352), datetime(2026-11-17 14:00), datetime(2026-11-17 16:00), datetime(2026-11-17), real(1.35), real(0.0),
+  'E063', 'F27', 'Drop', long(9369), long(9372), datetime(2026-11-18 09:00), datetime(2026-11-18 12:00), datetime(2026-11-18), real(0.72), real(0.0),
+  'E064', 'F44', 'Spike', long(9428), long(9429), datetime(2026-11-20 20:00), datetime(2026-11-20 21:00), datetime(2026-11-20), real(1.4), real(0.0)
+]
+//--
+weather_hourly | summarize n = count(), t = sum(temp_c), f = sum(temp_fc_c)
+//--
+planted_event | summarize n = count()

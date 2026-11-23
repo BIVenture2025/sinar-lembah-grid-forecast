@@ -1,0 +1,162 @@
+// KQL script
+// P37 EH_SinarLembah schema: tables (OneLake availability at creation), streaming off, functions, update policies
+
+.create-merge table feeder (feeder_id:string, feeder_no:long, feeder_name:string, substation_id:string, substation_name:string, district:string, feeder_type:string, type_code:string, rated_peak_mw:real) with (folder = "reference")
+.alter table feeder policy mirroring dataformat=parquet with (IsEnabled=true, TargetLatencyInMinutes=5)
+.create-merge table calendar_day (day_index:long, ['date']:datetime, day_type:string, holiday_name:string, is_festive:bool, month:long) with (folder = "reference")
+.alter table calendar_day policy mirroring dataformat=parquet with (IsEnabled=true, TargetLatencyInMinutes=5)
+.create-merge table load_shape (type_code:string, day_type:string, hour_of_day:long, shape:real) with (folder = "reference")
+.create-merge table month_temp (month:long, mean_c:real) with (folder = "reference")
+.create-merge table hour_temp (hour_of_day:long, hour_offset:real) with (folder = "reference")
+.create-merge table type_param (type_code:string, cool_k:real, festive_k:real) with (folder = "reference")
+.create-merge table planted_event (event_id:string, feeder_id:string, event_type:string, start_index:long, end_index:long, start_hour:datetime, end_hour:datetime, start_date:datetime, factor:real, stuck_mw:real) with (folder = "reference")
+.alter table planted_event policy mirroring dataformat=parquet with (IsEnabled=true, TargetLatencyInMinutes=5)
+.create-merge table switching_log (switch_id:string, from_feeder_id:string, to_feeder_id:string, start_index:long, end_index:long, start_hour:datetime, end_hour:datetime, share:real) with (folder = "reference")
+.alter table switching_log policy mirroring dataformat=parquet with (IsEnabled=true, TargetLatencyInMinutes=5)
+.create-merge table switching_hour (feeder_id:string, hour_index:long, switch_id:string) with (folder = "reference")
+.create-merge table weather_hourly (hour_index:long, reading_hour:datetime, reading_date:datetime, hour_of_day:long, temp_c:real, temp_fc_c:real) with (folder = "reference")
+.alter table weather_hourly policy mirroring dataformat=parquet with (IsEnabled=true, TargetLatencyInMinutes=5)
+.create-merge table meter_reading (feeder_id:string, reading_hour:datetime, reading_date:datetime, hour_of_day:long, hour_index:long, demand_mw:real, batch_id:string, loaded_at:datetime) with (folder = "stream")
+.alter table meter_reading policy mirroring dataformat=parquet with (IsEnabled=true, TargetLatencyInMinutes=5)
+.create-merge table baseline_profile (baseline_id:string, feeder_id:string, day_type:string, hour_of_day:long, usual_mw:real, spread_mw:real, p25_mw:real, p75_mw:real, n:long, valid_from_index:long, valid_to_index:long) with (folder = "detect")
+.create-merge table reading_scored (feeder_id:string, reading_hour:datetime, reading_date:datetime, hour_of_day:long, hour_index:long, demand_mw:real, day_type:string, usual_mw:real, spread_mw:real, z:real, switch_id:string, baseline_id:string, batch_id:string) with (folder = "stream")
+.alter table reading_scored policy mirroring dataformat=parquet with (IsEnabled=true, TargetLatencyInMinutes=5)
+.create-merge table reading_alert (alert_id:string, feeder_id:string, reading_hour:datetime, reading_date:datetime, hour_of_day:long, hour_index:long, alert_type:string, z:real, demand_mw:real, usual_mw:real, spread_mw:real, switch_id:string, source:string, batch_id:string, detected_at:datetime) with (folder = "stream")
+.alter table reading_alert policy mirroring dataformat=parquet with (IsEnabled=true, TargetLatencyInMinutes=5)
+.alter table meter_reading policy streamingingestion disable
+.alter table reading_scored policy streamingingestion disable
+.alter table reading_alert policy streamingingestion disable
+.create-or-alter function with (folder = "gen", docstring = "Uniform [0,1) from three longs: 32-bit mixing hash, exact copy of gen_oracle.u", skipvalidation = "true") fn_u(a:long, b:long, c:long) {
+    let x0 = binary_and(binary_xor(binary_xor(a * 73856093, b * 19349663), c * 83492791), 4294967295);
+    let x1 = binary_and(binary_xor(binary_shift_right(x0, 16), x0) * 73244475, 4294967295);
+    let x2 = binary_and(binary_xor(binary_shift_right(x1, 16), x1) * 73244475, 4294967295);
+    let x3 = binary_xor(binary_shift_right(x2, 16), x2);
+    todouble(x3) / 4294967296.0
+}
+.create-or-alter function with (folder = "gen", docstring = "Clean demand (MW) for all feeders, hour_index in [from_index, to_index): gen_oracle.base_demand", skipvalidation = "true") fn_clean(from_index:long, to_index:long) {
+    range hour_index from from_index to to_index - 1 step 1
+    | extend day_index = hour_index / 24, hour_of_day = hour_index % 24
+    | lookup kind=inner calendar_day on day_index
+    | extend tnoise = (fn_u(day_index, 1, 11) - 0.5) * 2.4, rain = fn_u(day_index, 2, 13) < 0.35
+    | lookup kind=inner month_temp on month
+    | lookup kind=inner hour_temp on hour_of_day
+    | extend off = iff(rain and hour_of_day >= 13 and hour_of_day <= 18, hour_offset * 0.4, hour_offset)
+    | extend temp_c = mean_c + tnoise + off
+    | extend k = 1
+    | join kind=inner (feeder | project feeder_id, feeder_no, type_code, rated_peak_mw, k = 1) on k
+    | lookup kind=inner type_param on type_code
+    | lookup kind=inner load_shape on type_code, day_type, hour_of_day
+    | extend cool = 1.0 + cool_k * (temp_c - 27.0) / 10.0
+    | extend growth = 1.0 + 0.03 * hour_index / 8760.0
+    | extend festive_f = iff(is_festive, festive_k, 1.0)
+    | extend noise = 1.0 + 0.10 * (fn_u(feeder_no, hour_index, 1) + fn_u(feeder_no, hour_index, 2) + fn_u(feeder_no, hour_index, 3) - 1.5)
+    | extend dayf = 1.0 + 0.08 * (fn_u(feeder_no, day_index, 4) - 0.5)
+    | extend clean_mw = rated_peak_mw * shape * cool * growth * festive_f * noise * dayf
+    | project feeder_id, hour_index, day_index, hour_of_day, clean_mw
+}
+.create-or-alter function with (folder = "gen", docstring = "Hourly weather in [from_index, to_index): actual temperature and its day-ahead forecast (gen_oracle.weather)", skipvalidation = "true") fn_weather(from_index:long, to_index:long) {
+    range hour_index from from_index to to_index - 1 step 1
+    | extend day_index = hour_index / 24, hour_of_day = hour_index % 24
+    | lookup kind=inner calendar_day on day_index
+    | extend tnoise = (fn_u(day_index, 1, 11) - 0.5) * 2.4, rain = fn_u(day_index, 2, 13) < 0.35
+    | lookup kind=inner month_temp on month
+    | lookup kind=inner hour_temp on hour_of_day
+    | extend off = iff(rain and hour_of_day >= 13 and hour_of_day <= 18, hour_offset * 0.4, hour_offset)
+    | extend temp_c = mean_c + tnoise + off
+    | extend temp_fc_c = temp_c + (fn_u(day_index, 5, 53) - 0.5) * 2.0 + (fn_u(hour_index, 6, 59) - 0.5) * 0.6
+    | extend reading_hour = datetime(2025-10-24) + hour_index * 1h
+    | project hour_index, reading_hour, reading_date = startofday(reading_hour), hour_of_day, temp_c, temp_fc_c
+}
+.create-or-alter function with (folder = "gen", docstring = "Generated readings for hour_index in [from_index, to_index): switching transfers, then planted events (last event wins), rounded to 0.001 MW", skipvalidation = "true") fn_gen(from_index:long, to_index:long) {
+    let c = fn_clean(from_index, to_index);
+    let sw = switching_log
+        | mv-expand hour_index = range(start_index, end_index - 1, 1) to typeof(long)
+        | where hour_index >= from_index and hour_index < to_index
+        | project from_feeder_id, to_feeder_id, hour_index, share;
+    let moved = sw
+        | join kind=inner (c | project from_feeder_id = feeder_id, hour_index, clean_mw) on from_feeder_id, hour_index
+        | extend m = clean_mw * share;
+    let delta = union (moved | project feeder_id = from_feeder_id, hour_index, d = -m), (moved | project feeder_id = to_feeder_id, hour_index, d = m);
+    let ev = planted_event
+        | mv-expand hour_index = range(start_index, end_index - 1, 1) to typeof(long)
+        | where hour_index >= from_index and hour_index < to_index
+        | summarize arg_max(event_id, event_type, factor, start_index, end_index, stuck_mw) by feeder_id, hour_index;
+    c
+    | join kind=leftouter delta on feeder_id, hour_index
+    | extend series = iff(isnull(d), clean_mw, clean_mw + d)
+    | join kind=leftouter ev on feeder_id, hour_index
+    | extend out_mw = case(event_type in ("Spike", "Drop"), series * factor,
+                           event_type == "Flat", stuck_mw,
+                           event_type == "Drift", series * (1.0 + (factor - 1.0) * (hour_index - start_index) / (end_index - start_index)),
+                           series)
+    | extend reading_hour = datetime(2025-10-24) + hour_index * 1h
+    | project feeder_id, reading_hour, reading_date = startofday(reading_hour), hour_of_day, hour_index, demand_mw = round(out_mw, 3)
+}
+.create-or-alter function with (folder = "detect", docstring = "Usual load (median) and robust spread by feeder x day type x hour over days [from_day, to_day)", skipvalidation = "true") fn_baseline(bid:string, from_day:long, to_day:long, valid_from_index:long, valid_to_index:long) {
+    meter_reading
+    | where hour_index >= from_day * 24 and hour_index < to_day * 24
+    | extend day_index = hour_index / 24
+    | lookup kind=inner calendar_day on day_index
+    | summarize percentiles(demand_mw, 25, 50, 75), n = count() by feeder_id, day_type, hour_of_day
+    | project baseline_id = bid, feeder_id, day_type, hour_of_day, usual_mw = percentile_demand_mw_50,
+              spread_mw = max_of((percentile_demand_mw_75 - percentile_demand_mw_25) / 1.349, 0.03 * percentile_demand_mw_50),
+              p25_mw = percentile_demand_mw_25, p75_mw = percentile_demand_mw_75, n, valid_from_index, valid_to_index
+}
+.create-or-alter function with (folder = "detect", docstring = "Score readings in [from_index, to_index) against baseline bid (backfill)", skipvalidation = "true") fn_score_range(from_index:long, to_index:long, bid:string) {
+    meter_reading
+    | where hour_index >= from_index and hour_index < to_index
+    | extend day_index = hour_index / 24
+    | lookup kind=inner (calendar_day | project day_index, day_type) on day_index
+    | lookup kind=leftouter (baseline_profile | where baseline_id == bid | project feeder_id, day_type, hour_of_day, usual_mw, spread_mw) on feeder_id, day_type, hour_of_day
+    | lookup kind=leftouter switching_hour on feeder_id, hour_index
+    | extend z = (demand_mw - usual_mw) / spread_mw
+    | project feeder_id, reading_hour, reading_date, hour_of_day, hour_index, demand_mw, day_type, usual_mw, spread_mw, z,
+              switch_id = coalesce(switch_id, ""), baseline_id = bid, batch_id
+}
+.create-or-alter function with (folder = "detect", docstring = "Update policy 1: score each new batch against the baseline valid for its hours; rows outside every baseline are skipped", skipvalidation = "true") fn_score_policy() {
+    let b = baseline_profile | summarize by baseline_id, valid_from_index, valid_to_index;
+    meter_reading
+    | extend k = 1
+    | join kind=inner (b | extend k = 1) on k
+    | where hour_index >= valid_from_index and hour_index < valid_to_index
+    | project-away k, k1, valid_from_index, valid_to_index
+    | extend day_index = hour_index / 24
+    | lookup kind=inner (calendar_day | project day_index, day_type) on day_index
+    | lookup kind=leftouter (baseline_profile | project baseline_id, feeder_id, day_type, hour_of_day, usual_mw, spread_mw) on baseline_id, feeder_id, day_type, hour_of_day
+    | lookup kind=leftouter switching_hour on feeder_id, hour_index
+    | extend z = (demand_mw - usual_mw) / spread_mw
+    | project feeder_id, reading_hour, reading_date, hour_of_day, hour_index, demand_mw, day_type, usual_mw, spread_mw, z,
+              switch_id = coalesce(switch_id, ""), baseline_id, batch_id
+}
+.create-or-alter function with (folder = "detect", docstring = "Spike and drop alerts from scored readings in [from_index, to_index) (backfill)", skipvalidation = "true") fn_alert_range(from_index:long, to_index:long) {
+    let src = "Backfill";
+    reading_scored
+    | where hour_index >= from_index and hour_index < to_index
+    | where abs(z) >= 5.0
+    | project alert_id = strcat(feeder_id, "-", tostring(hour_index), "-", iff(z > 0, "S", "D")), feeder_id, reading_hour, reading_date, hour_of_day, hour_index,
+              alert_type = iff(z > 0, "Spike", "Drop"), z, demand_mw, usual_mw, spread_mw, switch_id, source = src, batch_id, detected_at = now()
+}
+.create-or-alter function with (folder = "detect", docstring = "Update policy 2: spike and drop alerts from each newly scored batch", skipvalidation = "true") fn_alert_policy() {
+    let src = "Update policy";
+    reading_scored
+    | where abs(z) >= 5.0
+    | project alert_id = strcat(feeder_id, "-", tostring(hour_index), "-", iff(z > 0, "S", "D")), feeder_id, reading_hour, reading_date, hour_of_day, hour_index,
+              alert_type = iff(z > 0, "Spike", "Drop"), z, demand_mw, usual_mw, spread_mw, switch_id, source = src, batch_id, detected_at = now()
+}
+.create-or-alter function with (folder = "detect", docstring = "Flat-meter alerts: the hour in [from_index, to_index) at which a feeder has repeated one reading for 6 hours (one alert per episode)", skipvalidation = "true") fn_flat_range(from_index:long, to_index:long, src:string) {
+    meter_reading
+    | where hour_index >= from_index - 6 and hour_index < to_index
+    | summarize arg_max(loaded_at, *) by feeder_id, hour_index
+    | order by feeder_id asc, hour_index asc
+    | extend same = prev(feeder_id) == feeder_id and prev(hour_index) == hour_index - 1 and abs(demand_mw - prev(demand_mw)) < 0.0005
+    | extend run = row_cumsum(iff(same, 1, 0), not(same))
+    | where run == 5 and hour_index >= from_index
+    | extend day_index = hour_index / 24
+    | lookup kind=inner (calendar_day | project day_index, day_type) on day_index
+    | lookup kind=leftouter switching_hour on feeder_id, hour_index
+    | project alert_id = strcat(feeder_id, "-", tostring(hour_index), "-F"), feeder_id, reading_hour, reading_date, hour_of_day, hour_index,
+              alert_type = "Flat", z = real(null), demand_mw, usual_mw = real(null), spread_mw = real(null), switch_id = coalesce(switch_id, ""),
+              source = src, batch_id, detected_at = now()
+}
+.alter table reading_scored policy update @'[{"IsEnabled": true, "Source": "meter_reading", "Query": "fn_score_policy()", "IsTransactional": true, "PropagateIngestionProperties": true}]'
+.alter table reading_alert policy update @'[{"IsEnabled": true, "Source": "reading_scored", "Query": "fn_alert_policy()", "IsTransactional": true, "PropagateIngestionProperties": true}]'

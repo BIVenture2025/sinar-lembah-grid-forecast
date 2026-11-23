@@ -1,0 +1,9 @@
+meter_reading | summarize rows = count(), feeders = dcount(feeder_id), hours = dcount(hour_index), sum_mw = sum(demand_mw), min_h = min(hour_index), max_h = max(hour_index)
+//--
+meter_reading | summarize rows = count(), sum_mw = sum(demand_mw) by day = hour_index / 24 | order by day asc
+//--
+reading_scored | summarize rows = count(), scored = countif(isnotnull(z)) by baseline_id
+//--
+reading_alert | summarize n = count() by source, alert_type | order by source asc, alert_type asc
+//--
+union withsource = t feeder, calendar_day, load_shape, month_temp, hour_temp, type_param, planted_event, switching_log, switching_hour, baseline_profile | summarize n = count() by t | order by t asc

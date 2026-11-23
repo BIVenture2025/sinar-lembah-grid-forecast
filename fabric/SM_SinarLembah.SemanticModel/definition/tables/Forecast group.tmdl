@@ -1,0 +1,107 @@
+/// Substation and system forecasts with ranges from their own backtest residuals.
+table 'Forecast group'
+	lineageTag: 63ea0f18-21e3-58b4-b492-e912ea78ef17
+
+	column group_key
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: group_key
+		lineageTag: f01bfde3-4bd9-5bf8-b880-b9402520cc23
+
+	column target_date
+		dataType: dateTime
+		isHidden
+		formatString: dd mmm yyyy hh:nn
+		summarizeBy: none
+		sourceColumn: target_date
+		lineageTag: 16c07e5b-dd36-55fc-a918-3cd914f96d7e
+
+	column hour_of_day
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: hour_of_day
+		lineageTag: 6b4b8433-181c-5468-8a7a-a57bbcf36672
+
+	column target_hour
+		dataType: dateTime
+		isHidden
+		formatString: dd mmm yyyy hh:nn
+		summarizeBy: none
+		sourceColumn: target_hour
+		lineageTag: 06798935-da8e-5900-bf44-1aec714c70c8
+
+	column hour_index
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: hour_index
+		lineageTag: 32996128-34d0-5737-a10f-5ef99de1f01b
+
+	column fold
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: fold
+		lineageTag: ee7232d1-ccd9-5eda-8097-d5f30253827e
+
+	column is_backtest
+		dataType: boolean
+		isHidden
+		summarizeBy: none
+		sourceColumn: is_backtest
+		lineageTag: c139134e-a00c-5194-b884-2ab78986ce13
+
+	column forecast_mw
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		summarizeBy: none
+		sourceColumn: forecast_mw
+		lineageTag: 21ecdbaa-04c3-5993-b22d-24069879f56a
+
+	column naive_mw
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		summarizeBy: none
+		sourceColumn: naive_mw
+		lineageTag: 30a157cb-f066-50dd-9d45-afa83bf4e897
+
+	column actual_mw
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		summarizeBy: none
+		sourceColumn: actual_mw
+		lineageTag: 7bb2c396-bcc0-51d3-9d1c-d06d697c37c9
+
+	column lo_mw
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		summarizeBy: none
+		sourceColumn: lo_mw
+		lineageTag: c6f5c00d-40ee-5bfc-a1c0-e0f9271c5396
+
+	column hi_mw
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		summarizeBy: none
+		sourceColumn: hi_mw
+		lineageTag: 54a1b3c1-785e-5320-a96e-72f5ff0cfe53
+
+	column level
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: level
+		lineageTag: 68e04513-3c45-5577-95c8-5bb4ee497501
+
+	partition 'Forecast group' = entity
+		mode: directLake
+		source
+			entityName: gold_forecast_group
+			expressionSource: 'DirectLake - LH_SinarLembah'

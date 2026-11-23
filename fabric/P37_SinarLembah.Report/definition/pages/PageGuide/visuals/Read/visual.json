@@ -1,0 +1,220 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "Read",
+  "position": {
+    "x": 24,
+    "y": 100,
+    "z": 1100,
+    "height": 404,
+    "width": 600,
+    "tabOrder": 600
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "How to read this report",
+                    "textStyle": {
+                      "fontSize": "14pt",
+                      "color": "#27221F",
+                      "fontWeight": "bold"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Usual load: the median reading for the same feeder, hour and day type (weekday, Saturday, Sunday or public holiday) over the 12 weeks before.",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#27221F"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Alert: a reading five typical spreads above or below the usual load, or a meter that repeats one value for six hours. Alerts arrive with each hourly batch.",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#27221F"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Incident: alerts on one feeder in back-to-back hours; one quiet hour ends it.",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#27221F"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Explained by: planned switching when the switching log covers the hour (a planned load transfer), otherwise not explained.",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#27221F"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Forecast: made after the last hourly batch for the next day, from the last day, the same hour in the last four weeks, the hour, day type, public holidays and the temperature forecast.",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#27221F"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Forecast error: absolute miss over actual demand (WAPE). Same hour last week is the simple forecast the model has to beat; the gain is the difference in points.",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#27221F"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Detector check: the generator planted spikes, drops, stuck meters and slow drifts; only this check reads that answer key.",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#27221F"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFB'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#E1DACB'"
+                    }
+                  }
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "padding": [
+        {
+          "properties": {
+            "left": {
+              "expr": {
+                "Literal": {
+                  "Value": "14L"
+                }
+              }
+            },
+            "right": {
+              "expr": {
+                "Literal": {
+                  "Value": "14L"
+                }
+              }
+            },
+            "top": {
+              "expr": {
+                "Literal": {
+                  "Value": "10L"
+                }
+              }
+            },
+            "bottom": {
+              "expr": {
+                "Literal": {
+                  "Value": "10L"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

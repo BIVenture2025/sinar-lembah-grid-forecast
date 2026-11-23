@@ -1,0 +1,117 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "name": "RunGold",
+        "type": "TridentNotebook",
+        "dependsOn": [],
+        "policy": {
+          "timeout": "0.02:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "notebookId": "37a00000-0000-4000-8000-0000000000a1",
+          "workspaceId": "00000000-0000-0000-0000-000000000000"
+        }
+      },
+      {
+        "name": "GateGold",
+        "type": "IfCondition",
+        "dependsOn": [
+          {
+            "activity": "RunGold",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "typeProperties": {
+          "expression": {
+            "type": "Expression",
+            "value": "@and(not(equals(pipeline().parameters.p_block_at, 'Gold')), endswith(string(json(activity('RunGold').output.result.exitValue).verdict), '_OK'))"
+          },
+          "ifTrueActivities": [],
+          "ifFalseActivities": [
+            {
+              "name": "FailGold",
+              "type": "Fail",
+              "dependsOn": [],
+              "typeProperties": {
+                "message": {
+                  "type": "Expression",
+                  "value": "@concat('Gold blocked: ', substring(string(activity('RunGold').output.result.exitValue), 0, min(400, length(string(activity('RunGold').output.result.exitValue)))))"
+                },
+                "errorCode": "P37_GOLD_BLOCKED"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "RunForecast",
+        "type": "TridentNotebook",
+        "dependsOn": [
+          {
+            "activity": "GateGold",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "policy": {
+          "timeout": "0.02:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "notebookId": "37a00000-0000-4000-8000-0000000000a2",
+          "workspaceId": "00000000-0000-0000-0000-000000000000"
+        }
+      },
+      {
+        "name": "GateForecast",
+        "type": "IfCondition",
+        "dependsOn": [
+          {
+            "activity": "RunForecast",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "typeProperties": {
+          "expression": {
+            "type": "Expression",
+            "value": "@and(not(equals(pipeline().parameters.p_block_at, 'Forecast')), endswith(string(json(activity('RunForecast').output.result.exitValue).verdict), '_OK'))"
+          },
+          "ifTrueActivities": [],
+          "ifFalseActivities": [
+            {
+              "name": "FailForecast",
+              "type": "Fail",
+              "dependsOn": [],
+              "typeProperties": {
+                "message": {
+                  "type": "Expression",
+                  "value": "@concat('Forecast blocked: ', substring(string(activity('RunForecast').output.result.exitValue), 0, min(400, length(string(activity('RunForecast').output.result.exitValue)))))"
+                },
+                "errorCode": "P37_FORECAST_BLOCKED"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "parameters": {
+      "p_block_at": {
+        "type": "string",
+        "defaultValue": ""
+      }
+    }
+  }
+}

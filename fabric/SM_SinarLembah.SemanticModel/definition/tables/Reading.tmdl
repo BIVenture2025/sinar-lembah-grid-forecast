@@ -1,0 +1,155 @@
+/// Hourly readings scored against the usual load, 21 Sep to 22 Nov 2026 (KQL table reading_scored).
+table Reading
+	lineageTag: 14a87273-70aa-59fe-b36d-41dcffcd4c3a
+
+	/// Last reading hour in the model; every 'last 24 hours' figure counts back from it.
+	measure 'Cut-off' = CALCULATE ( MAX ( Reading[reading_hour] ), REMOVEFILTERS () )
+		formatString: dd mmm yyyy hh:nn
+		displayFolder: Base
+		lineageTag: 81843945-4e5d-5380-8265-69a52581a97a
+
+	/// Sum of hourly demand for the selection; at one hour it is MW, over a day it is MWh.
+	measure 'Demand MW' = SUM ( Reading[demand_mw] )
+		formatString: #,0.0
+		displayFolder: Load
+		lineageTag: b70a4a2e-3b98-5f50-a291-f52195178cf1
+
+	/// Sum of the usual load (median for the feeder, hour and day type over the 12 weeks before).
+	measure 'Usual MW' = SUM ( Reading[usual_mw] )
+		formatString: #,0.0
+		displayFolder: Load
+		lineageTag: d7076956-8596-574a-817a-eb55e4d18ab4
+
+	/// Highest hourly sum for the selection: the max of hourly sums, not the sum of peaks.
+	measure 'Peak demand MW' = MAXX ( VALUES ( Reading[reading_hour] ), [Demand MW] )
+		formatString: #,0.0
+		displayFolder: Load
+		lineageTag: 43c9b278-5225-511f-820d-b08f713e1a91
+
+	/// Hourly demand in the 7 days up to the cut-off; blank before them (chart axis).
+	measure 'Demand MW, last 7 days' =
+			VAR c = [Cut-off]
+			RETURN
+				IF ( MAX ( Reading[reading_hour] ) > c - 7, [Demand MW] )
+		formatString: #,0.00
+		displayFolder: Load
+		lineageTag: 4b944c05-39fe-5174-9355-92d819d4d4d2
+
+	/// Usual load for the same hours.
+	measure 'Usual MW, last 7 days' =
+			VAR c = [Cut-off]
+			RETURN
+				IF ( MAX ( Reading[reading_hour] ) > c - 7, [Usual MW] )
+		formatString: #,0.00
+		displayFolder: Load
+		lineageTag: 09e3bd3e-c1d6-5b2c-b27f-b44c35332a13
+
+	/// Highest hourly demand for the selection in the last 7 days.
+	measure 'Peak demand MW, last 7 days' =
+			VAR c = [Cut-off]
+			RETURN
+				CALCULATE ( [Peak demand MW], Reading[reading_hour] > c - 7, REMOVEFILTERS ( 'Date' ) )
+		formatString: #,0.0
+		displayFolder: Load
+		lineageTag: f85c5350-9702-531c-b231-b98b49852bcb
+
+	column feeder_id
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: feeder_id
+		lineageTag: 4c1adf82-9a16-5ac2-aeb7-1f127a754fbf
+
+	column reading_hour
+		dataType: dateTime
+		formatString: dd mmm yyyy hh:nn
+		summarizeBy: none
+		sourceColumn: reading_hour
+		lineageTag: 4cb4955a-750c-5815-b91c-636d8fb95485
+
+	column reading_date
+		dataType: dateTime
+		isHidden
+		formatString: dd mmm yyyy hh:nn
+		summarizeBy: none
+		sourceColumn: reading_date
+		lineageTag: 80d8b029-99e2-521b-9572-0c4a5c36de85
+
+	column hour_of_day
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: hour_of_day
+		lineageTag: e5203e3e-c369-5256-aaf7-d898253e4ee4
+
+	column hour_index
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: hour_index
+		lineageTag: ec26e185-62c6-5091-aab3-e72119c392b1
+
+	column demand_mw
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		summarizeBy: none
+		sourceColumn: demand_mw
+		lineageTag: 36a0cc05-db07-53d9-9f81-2c3ce0410a24
+
+	column day_type
+		dataType: string
+		summarizeBy: none
+		sourceColumn: day_type
+		lineageTag: 3fa88185-5ced-577a-b97d-b7591d73a030
+
+	column usual_mw
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		summarizeBy: none
+		sourceColumn: usual_mw
+		lineageTag: 94d8ed78-d748-500c-9ed9-71e7750697bd
+
+	column spread_mw
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		summarizeBy: none
+		sourceColumn: spread_mw
+		lineageTag: 705372d0-c18a-559b-b2a7-2e5823fe6356
+
+	column z
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		summarizeBy: none
+		sourceColumn: z
+		lineageTag: a27d3700-4298-546c-b4be-9c0a1b617ffb
+
+	column switch_id
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: switch_id
+		lineageTag: 69c0bb4c-3ce1-55bb-aa29-aa744963a2d8
+
+	column baseline_id
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: baseline_id
+		lineageTag: efd14ab3-e5ce-5cb7-9e65-0d41232f9744
+
+	column batch_id
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: batch_id
+		lineageTag: cc977406-1238-5d42-9ffe-b9e018a7d994
+
+	partition Reading = entity
+		mode: directLake
+		source
+			entityName: reading_scored
+			expressionSource: 'DirectLake - LH_SinarLembah'

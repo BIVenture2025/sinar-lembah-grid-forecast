@@ -1,0 +1,74 @@
+/// 48 feeders and their main distribution substation (KQL table feeder).
+table Feeder
+	lineageTag: 32042568-d039-57cc-901f-743fd23bb4d5
+
+	/// Rated peak of the selected feeders.
+	measure 'Rated peak MW' = SUM ( Feeder[rated_peak_mw] )
+		formatString: #,0.0
+		displayFolder: Load
+		lineageTag: 59f09cf5-ee7a-538e-bc5a-c1c712fc8781
+
+	column feeder_id
+		dataType: string
+		summarizeBy: none
+		sourceColumn: feeder_id
+		lineageTag: b1e9b569-f5de-563e-a674-8ed527d1aa36
+
+	column feeder_no
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: feeder_no
+		lineageTag: 6d81eb21-d63e-5c2b-af3b-501841fb7300
+
+	column feeder_name
+		dataType: string
+		summarizeBy: none
+		sourceColumn: feeder_name
+		sortByColumn: feeder_no
+		lineageTag: eb09e892-6548-500c-b553-4c03f6465bba
+
+	column substation_id
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: substation_id
+		lineageTag: 870d274c-fb4e-5061-8831-1ad42b902a5c
+
+	column substation_name
+		dataType: string
+		summarizeBy: none
+		sourceColumn: substation_name
+		lineageTag: 582ec127-9f6b-54c8-893b-4181ee84a752
+
+	column district
+		dataType: string
+		summarizeBy: none
+		sourceColumn: district
+		lineageTag: 10b95852-c6c4-5a4d-98c5-ed30c29f7b40
+
+	column feeder_type
+		dataType: string
+		summarizeBy: none
+		sourceColumn: feeder_type
+		lineageTag: 9faa97a6-7d9f-59c7-9d0a-0a4e6f098c08
+
+	column type_code
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: type_code
+		lineageTag: 0f37f224-b12f-54f4-9e68-5876a50d521e
+
+	column rated_peak_mw
+		dataType: double
+		formatString: #,0.00
+		summarizeBy: none
+		sourceColumn: rated_peak_mw
+		lineageTag: 2fa9e3b7-f100-51e3-bcec-e61268cb0acb
+
+	partition Feeder = entity
+		mode: directLake
+		source
+			entityName: feeder
+			expressionSource: 'DirectLake - LH_SinarLembah'

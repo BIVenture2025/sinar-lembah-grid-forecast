@@ -1,0 +1,291 @@
+/// One row per alert hour; incidents group consecutive hours on one feeder.
+table Alert
+	lineageTag: 934836f7-1b31-5264-bfba-71dbe24567eb
+
+	/// Feeder-hours with an alert.
+	measure 'Alert hours' = COUNTROWS ( Alert )
+		formatString: #,0
+		displayFolder: Alerts
+		lineageTag: 10afe940-998e-5ea7-be8f-1c90021f0155
+
+	/// Runs of alerts on one feeder in back-to-back hours; one quiet hour ends an incident.
+	measure Incidents = DISTINCTCOUNT ( Alert[incident_id] )
+		formatString: #,0
+		displayFolder: Alerts
+		lineageTag: c729c677-5809-56f3-bdea-2b69c449b205
+
+	/// Incidents with an alert hour in the 24 hours up to the cut-off.
+	measure 'Incidents last 24 h' =
+			VAR c = [Cut-off]
+			RETURN
+				COALESCE ( CALCULATE ( [Incidents], Alert[reading_hour] > c - 1, REMOVEFILTERS ( 'Date' ) ), 0 )
+		formatString: #,0
+		displayFolder: Alerts
+		lineageTag: 48e5ce1b-a8f7-575d-8ae3-d7da684ea409
+
+	/// Incidents with an alert hour in the 7 days up to the cut-off.
+	measure 'Incidents last 7 days' =
+			VAR c = [Cut-off]
+			RETURN
+				COALESCE ( CALCULATE ( [Incidents], Alert[reading_hour] > c - 7, REMOVEFILTERS ( 'Date' ) ), 0 )
+		formatString: #,0
+		displayFolder: Alerts
+		lineageTag: fc3dbf29-baec-50fe-aa07-c0f3f551ee02
+
+	/// Incidents in the 7 days before the last 7.
+	measure 'Incidents previous 7 days' =
+			VAR c = [Cut-off]
+			RETURN
+				COALESCE ( CALCULATE ( [Incidents], Alert[reading_hour] > c - 14, Alert[reading_hour] <= c - 7, REMOVEFILTERS ( 'Date' ) ), 0 )
+		formatString: #,0
+		displayFolder: Alerts
+		lineageTag: 8cca200a-f860-535a-9700-ce5710272594
+
+	/// Alert hours in the last 7 days.
+	measure 'Alert hours last 7 days' =
+			VAR c = [Cut-off]
+			RETURN
+				CALCULATE ( [Alert hours], Alert[reading_hour] > c - 7, REMOVEFILTERS ( 'Date' ) )
+		formatString: #,0
+		displayFolder: Alerts
+		lineageTag: 3c5902cf-9bb6-5785-bc34-d71ae721181d
+
+	/// Feeders with any alert in the last 7 days.
+	measure 'Feeders with alerts 7 days' =
+			VAR c = [Cut-off]
+			RETURN
+				COALESCE ( CALCULATE ( DISTINCTCOUNT ( Alert[feeder_id] ), Alert[reading_hour] > c - 7, REMOVEFILTERS ( 'Date' ) ), 0 )
+		formatString: #,0
+		displayFolder: Alerts
+		lineageTag: c3813236-7069-5054-b538-c6ba93ed5068
+
+	/// Share of last-7-day alert hours that a logged load transfer covers.
+	measure 'Switching share 7 days' =
+			VAR c = [Cut-off]
+			VAR sw = CALCULATE ( [Alert hours], Alert[cause] = "Planned switching", Alert[reading_hour] > c - 7, REMOVEFILTERS ( 'Date' ) )
+			RETURN
+				DIVIDE ( sw, [Alert hours last 7 days] )
+		formatString: 0%
+		displayFolder: Alerts
+		lineageTag: c40a5fba-22bd-5309-8e91-288181b4bb4e
+
+	/// Matured alert hours that fall inside a planted event (precision against the answer key).
+	measure 'Planted share of alert hours' =
+			VAR m = CALCULATE ( [Alert hours], Alert[is_matured] = TRUE () )
+			VAR p = CALCULATE ( [Alert hours], Alert[is_matured] = TRUE (), Alert[grade_cause] = "Planted event" )
+			RETURN
+				DIVIDE ( p, m )
+		formatString: 0%
+		displayFolder: Detector
+		lineageTag: 1df89b23-612f-5a10-9a8e-8fe502b46f99
+
+	/// Alert hours over the days in context that fall in the 30 days up to the cut-off; blank when none do (works by date or by weekday).
+	measure 'Alert hours, last 30 days' =
+			VAR c = [Cut-off]
+			VAR win = FILTER ( VALUES ( 'Date'[date] ), 'Date'[date] > c - 30 && 'Date'[date] <= c )
+			RETURN
+				IF ( NOT ISEMPTY ( win ), COALESCE ( CALCULATE ( [Alert hours], win ), 0 ) )
+		formatString: #,0
+		displayFolder: Alerts
+		lineageTag: 40bd04d4-2033-565d-a536-918b3092648d
+
+	/// Alert hours over the days in context that fall in the 7 days up to the cut-off; blank when none do (works by date or by weekday).
+	measure 'Alert hours by day, last 7 days' =
+			VAR c = [Cut-off]
+			VAR win = FILTER ( VALUES ( 'Date'[date] ), 'Date'[date] > c - 7 && 'Date'[date] <= c )
+			RETURN
+				IF ( NOT ISEMPTY ( win ), COALESCE ( CALCULATE ( [Alert hours], win ), 0 ) )
+		formatString: #,0
+		displayFolder: Alerts
+		lineageTag: 98c6c6b6-26b8-518d-a454-f02f0cd80748
+
+	/// Footer on every page: synthetic data and the cut-off, read from the data.
+	measure Disclaimer =
+			"Synthetic data for a fictional distributor. Readings up to " & FORMAT ( [Cut-off], "d mmm yyyy hh:nn" )
+				& ", Malaysia time. Demand in MW, energy in MWh."
+		displayFolder: Narrative
+		lineageTag: a6456485-08f0-5e9d-887b-42b46b604dce
+
+	/// Home: the as-of hour, read from the data.
+	measure 'Eyebrow Home' = "As of " & FORMAT ( [Cut-off], "d mmm yyyy, hh:nn" )
+		displayFolder: Narrative
+		lineageTag: 6bc6b22e-3f94-5581-942c-4eef693211c2
+
+	/// Home: what the report watches, counts read from the data.
+	measure 'Subtitle Home' =
+			VAR nf = CALCULATE ( DISTINCTCOUNT ( Feeder[feeder_id] ), REMOVEFILTERS () )
+			VAR ns = CALCULATE ( DISTINCTCOUNT ( Feeder[substation_id] ), REMOVEFILTERS () )
+			RETURN
+				nf & " feeders across " & ns & " main distribution substations report every hour. A reading far from the feeder's usual load "
+				& "raises an alert as it arrives. A day-ahead forecast gives tomorrow's demand hour by hour, with a range."
+		displayFolder: Narrative
+		lineageTag: 9009a4c6-5e41-500e-b01f-ce87574f1a0f
+
+	/// Meter Watch takeaway: last-24-hour incidents, the busiest substation this week and the switching share.
+	measure 'Title Meter Watch' =
+			VAR i24 = [Incidents last 24 h]
+			VAR t = TOPN ( 1, VALUES ( Feeder[substation_name] ), [Alert hours last 7 days], DESC )
+			VAR topName = MAXX ( t, Feeder[substation_name] )
+			VAR topHours = COALESCE ( MAXX ( t, [Alert hours last 7 days] ), 0 )
+			VAR sw = COALESCE ( [Switching share 7 days], 0 )
+			RETURN
+				FORMAT ( i24, "#,0" ) & IF ( i24 = 1, " incident", " incidents" ) & " in the last 24 hours. "
+				& IF ( topHours > 0, topName & " had the most alert hours this week (" & FORMAT ( topHours, "#,0" ) & "); " & FORMAT ( sw, "0%" )
+					& " of this week's alert hours fall in planned switching.", "No alert hours this week." )
+		displayFolder: Narrative
+		lineageTag: 08e491b7-4bba-5041-b045-99ddcece300f
+
+	column alert_id
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: alert_id
+		lineageTag: 574d4c26-5a54-525e-818b-eb4e04b80eee
+
+	column incident_id
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: incident_id
+		lineageTag: e66124a7-b027-5979-af61-eefd1f79ce06
+
+	column feeder_id
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: feeder_id
+		lineageTag: 99617416-10f8-5bce-9c51-aa46f8a44413
+
+	column reading_hour
+		dataType: dateTime
+		formatString: dd mmm yyyy hh:nn
+		summarizeBy: none
+		sourceColumn: reading_hour
+		lineageTag: 71e1fe3d-203d-57d1-ae74-b89ce84cb6f9
+
+	column reading_date
+		dataType: dateTime
+		isHidden
+		formatString: dd mmm yyyy hh:nn
+		summarizeBy: none
+		sourceColumn: reading_date
+		lineageTag: 3a047507-b7e3-5839-a59a-5778958f95c5
+
+	column hour_of_day
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: hour_of_day
+		lineageTag: 96943fa1-4a1c-5ce0-96d0-108ba8fdab89
+
+	column hour_index
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: hour_index
+		lineageTag: e3413357-4992-50ec-8b9b-4679e003f9bf
+
+	column alert_type
+		dataType: string
+		summarizeBy: none
+		sourceColumn: alert_type
+		lineageTag: aaa3b016-d68d-57b9-a67c-6c9cedaaca9e
+
+	column incident_type
+		dataType: string
+		summarizeBy: none
+		sourceColumn: incident_type
+		lineageTag: 2cf60fa9-8546-56b2-bf81-75048e549e98
+
+	column incident_hours
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: incident_hours
+		lineageTag: 442fc9a4-9502-5291-83fe-a2fd6abc1db9
+
+	column is_incident_start
+		dataType: boolean
+		isHidden
+		summarizeBy: none
+		sourceColumn: is_incident_start
+		lineageTag: 6006b2e8-635c-5272-9c00-232cfdc00955
+
+	column z
+		dataType: double
+		formatString: #,0.00
+		summarizeBy: none
+		sourceColumn: z
+		lineageTag: 5c3427ab-207a-5d72-bae6-ed79dcb156d3
+
+	column demand_mw
+		dataType: double
+		formatString: #,0.00
+		summarizeBy: none
+		sourceColumn: demand_mw
+		lineageTag: f2f1b927-1870-5a62-b4bb-c546e39e8041
+
+	column usual_mw
+		dataType: double
+		formatString: #,0.00
+		summarizeBy: none
+		sourceColumn: usual_mw
+		lineageTag: 7dc5663e-7a22-56d7-a18a-33e0b2b7e7e0
+
+	column spread_mw
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		summarizeBy: none
+		sourceColumn: spread_mw
+		lineageTag: 00a3c8aa-9d53-5095-a285-c2e994c53b67
+
+	column switch_id
+		dataType: string
+		summarizeBy: none
+		sourceColumn: switch_id
+		lineageTag: 796a0598-cd55-5214-96ab-7a8e66ebbf90
+
+	column cause
+		dataType: string
+		summarizeBy: none
+		sourceColumn: cause
+		lineageTag: fe737c97-d18d-593c-b4c9-3499b9a46849
+
+	column event_id
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: event_id
+		lineageTag: fca102d5-e457-57a0-9cfe-d3d6cba03a0a
+
+	column grade_cause
+		dataType: string
+		summarizeBy: none
+		sourceColumn: grade_cause
+		lineageTag: a5477675-27ac-5f8e-88f1-0333f3724abd
+
+	column is_matured
+		dataType: boolean
+		isHidden
+		summarizeBy: none
+		sourceColumn: is_matured
+		lineageTag: e43bb8d5-c108-5aeb-9f59-1711f89e0ed2
+
+	column source
+		dataType: string
+		summarizeBy: none
+		sourceColumn: source
+		lineageTag: 9336e2c7-55b1-5aaf-a952-832fe57ed5bc
+
+	column batch_id
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: batch_id
+		lineageTag: 13aaee8b-fe2d-505a-a886-d4fa6fb441e1
+
+	partition Alert = entity
+		mode: directLake
+		source
+			entityName: gold_alert
+			expressionSource: 'DirectLake - LH_SinarLembah'

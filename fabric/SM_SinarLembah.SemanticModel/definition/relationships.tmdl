@@ -1,0 +1,51 @@
+relationship 1a802065-0b8d-52a2-97ae-3c5b90469b26
+	fromColumn: Reading.feeder_id
+	toColumn: Feeder.feeder_id
+
+relationship 1fbefcd2-7d57-521f-afbe-9b5e53c03217
+	fromColumn: Reading.reading_date
+	toColumn: Date.date
+
+relationship 784194d1-f365-58f3-932c-6d42496f99e3
+	fromColumn: Reading.hour_of_day
+	toColumn: Hour.hour_of_day
+
+relationship 481e5f58-fa7b-5e62-9787-e689655d4b05
+	fromColumn: Alert.feeder_id
+	toColumn: Feeder.feeder_id
+
+relationship 242116e0-4174-5c3d-ba7f-f3943faa6922
+	fromColumn: Alert.reading_date
+	toColumn: Date.date
+
+relationship b17b529c-1b76-524b-bc46-a74f31af6268
+	fromColumn: Alert.hour_of_day
+	toColumn: Hour.hour_of_day
+
+relationship ee59b851-afb5-5b10-9a6c-ac5d229fede7
+	fromColumn: Forecast.feeder_id
+	toColumn: Feeder.feeder_id
+
+relationship b115073e-5a3d-51f5-acfb-4a39a97f588a
+	fromColumn: Forecast.target_date
+	toColumn: Date.date
+
+relationship 8951f26e-321d-5ff0-a045-9fc71d230643
+	fromColumn: Forecast.hour_of_day
+	toColumn: Hour.hour_of_day
+
+relationship 95ac2afd-38cb-5f5b-910c-2e1bef100038
+	fromColumn: 'Forecast group'.target_date
+	toColumn: Date.date
+
+relationship 25a82d82-c130-5a66-bc57-5b43d845b2c1
+	fromColumn: 'Forecast group'.hour_of_day
+	toColumn: Hour.hour_of_day
+
+relationship 27f1894a-a2ba-599b-ab56-e32d57c3fe83
+	fromColumn: 'Planted event'.feeder_id
+	toColumn: Feeder.feeder_id
+
+relationship ac67ac4c-4c50-593b-8a94-3accc57b7fed
+	fromColumn: 'Planted event'.start_date
+	toColumn: Date.date

@@ -1,0 +1,15 @@
+# P37 parameter.yml - rebinds the Dev ids when the estate is deployed into another workspace (SETTLED S215).
+# Dev values are the find_value; fabric-cicd resolves the replace_value in the target workspace.
+find_replace:
+  - find_value: "aaaaaaaa-0000-4000-8000-000000000001"
+    replace_value:
+      _ALL_: "$workspace.$id"
+  - find_value: "aaaaaaaa-0000-4000-8000-000000000002"
+    replace_value:
+      _ALL_: "$items.Lakehouse.LH_SinarLembah.$id"
+  - find_value: "aaaaaaaa-0000-4000-8000-000000000003"
+    replace_value:
+      _ALL_: "$items.KQLDatabase.EH_SinarLembah.$id"
+  - find_value: "aaaaaaaa-0000-4000-8000-000000000004"
+    replace_value:
+      _ALL_: "$items.Eventhouse.EH_SinarLembah.$id"

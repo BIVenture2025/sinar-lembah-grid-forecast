@@ -1,0 +1,5 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {"type": "SemanticModel", "displayName": "SM_SinarLembah", "description": "P37 Direct Lake model: readings, alerts, detector grading, forecast."},
+  "config": {"version": "2.0", "logicalId": "37a00000-0000-4000-8000-000000000006"}
+}

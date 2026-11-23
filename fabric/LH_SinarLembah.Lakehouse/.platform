@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Lakehouse",
+    "displayName": "LH_SinarLembah",
+    "description": "P37 cold path: shortcuts to the KQL tables, Gold tables, forecast outputs."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "37a00000-0000-4000-8000-000000000004"
+  }
+}

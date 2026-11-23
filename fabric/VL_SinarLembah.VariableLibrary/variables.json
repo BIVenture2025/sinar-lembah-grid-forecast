@@ -1,0 +1,35 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/variableLibrary/definition/variables/1.0.0/schema.json",
+  "variables": [
+    {
+      "name": "kql_database",
+      "type": "String",
+      "value": "EH_SinarLembah",
+      "note": "KQL database name in every environment"
+    },
+    {
+      "name": "grade_from",
+      "type": "String",
+      "value": "2026-09-21",
+      "note": "first day of the detector grading window"
+    },
+    {
+      "name": "z_threshold",
+      "type": "Number",
+      "value": 5.0,
+      "note": "alert when the reading is this many spreads from usual"
+    },
+    {
+      "name": "flat_hours",
+      "type": "Integer",
+      "value": 6,
+      "note": "equal readings in a row that make a flat-meter alert"
+    },
+    {
+      "name": "baseline_weeks",
+      "type": "Integer",
+      "value": 12,
+      "note": "weeks of history behind the usual load"
+    }
+  ]
+}

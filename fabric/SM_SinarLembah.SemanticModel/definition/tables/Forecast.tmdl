@@ -1,0 +1,282 @@
+/// Feeder-hour forecasts: 63 backtest days and the forecast day.
+table Forecast
+	lineageTag: d10f7844-cd3d-5413-8696-e3bea317ffed
+
+	/// The day the latest forecast is for.
+	measure 'Forecast day' = CALCULATE ( MAX ( Forecast[target_date] ), REMOVEFILTERS () )
+		formatString: dd mmm yyyy
+		displayFolder: Base
+		lineageTag: 8e892292-686e-5e03-823c-bdaef508ef2d
+
+	/// Sum of feeder forecasts for the selection.
+	measure 'Forecast MW' = SUM ( Forecast[forecast_mw] )
+		formatString: #,0.0
+		displayFolder: Forecast
+		lineageTag: 9cb2ad9f-edfa-54c7-ba2f-8cd633231ae5
+
+	/// Sum of actual load on backtest rows.
+	measure 'Actual MW' = SUM ( Forecast[actual_mw] )
+		formatString: #,0.0
+		displayFolder: Forecast
+		lineageTag: 8f2e68d4-d265-52e5-9832-2b20e6487f6a
+
+	/// The benchmark: the reading one week earlier.
+	measure 'Same hour last week MW' = SUM ( Forecast[naive_mw] )
+		formatString: #,0.0
+		displayFolder: Forecast
+		lineageTag: 0a228471-0ed5-5c15-9841-ffc7398b8bdb
+
+	/// Forecast energy for the forecast day.
+	measure 'Tomorrow MWh' =
+			VAR d = [Forecast day]
+			RETURN
+				CALCULATE ( [Forecast MW], Forecast[target_date] = d, REMOVEFILTERS ( 'Date' ) )
+		formatString: #,0
+		displayFolder: Forecast
+		lineageTag: 0a8f3d28-fd79-5bd4-a342-988db3a499b6
+
+	/// Highest hourly forecast for the selection on the forecast day.
+	measure 'Tomorrow peak MW' =
+			VAR d = [Forecast day]
+			RETURN
+				CALCULATE ( MAXX ( VALUES ( Hour[hour_of_day] ), [Forecast MW] ), Forecast[target_date] = d, REMOVEFILTERS ( 'Date' ) )
+		formatString: #,0.0
+		displayFolder: Forecast
+		lineageTag: a03e4491-de87-55ed-bffc-d2462d5ff62e
+
+	/// Hour of the peak on the forecast day; ties take the earliest hour.
+	measure 'Tomorrow peak hour' =
+			VAR d = [Forecast day]
+			VAR t = CALCULATETABLE ( ADDCOLUMNS ( VALUES ( Hour[hour_of_day] ), "@mw", [Forecast MW] ), Forecast[target_date] = d, REMOVEFILTERS ( 'Date' ) )
+			VAR pk = MAXX ( t, [@mw] )
+			RETURN
+				MINX ( FILTER ( t, [@mw] = pk ), Hour[hour_of_day] )
+		formatString: 0
+		displayFolder: Forecast
+		lineageTag: a03b31c9-cf6f-5ae4-bc48-78cc2e1df5c0
+
+	/// Low end of the range (10th to 90th percentile of past relative misses) for one feeder, one substation or all feeders; blank for other selections.
+	measure 'Range low MW' =
+			VAR nF = DISTINCTCOUNT ( Feeder[feeder_id] )
+			VAR nS = DISTINCTCOUNT ( Feeder[substation_id] )
+			RETURN
+				SWITCH (
+					TRUE (),
+					nF = 1, SUM ( Forecast[lo_mw] ),
+					nF = 48, CALCULATE ( SUM ( 'Forecast group'[lo_mw] ), REMOVEFILTERS ( 'Forecast group'[group_key], 'Forecast group'[level], 'Forecast group'[fold], 'Forecast group'[is_backtest] ), 'Forecast group'[level] = "System" ),
+					nS = 1 && nF = 6, CALCULATE ( SUM ( 'Forecast group'[lo_mw] ), REMOVEFILTERS ( 'Forecast group'[group_key], 'Forecast group'[level], 'Forecast group'[fold], 'Forecast group'[is_backtest] ), 'Forecast group'[level] = "Substation", TREATAS ( VALUES ( Feeder[substation_id] ), 'Forecast group'[group_key] ) )
+				)
+		formatString: #,0.0
+		displayFolder: Forecast
+		lineageTag: 566155b3-c791-5980-946b-ff192433032d
+
+	/// High end of the range; same rule as the low end.
+	measure 'Range high MW' =
+			VAR nF = DISTINCTCOUNT ( Feeder[feeder_id] )
+			VAR nS = DISTINCTCOUNT ( Feeder[substation_id] )
+			RETURN
+				SWITCH (
+					TRUE (),
+					nF = 1, SUM ( Forecast[hi_mw] ),
+					nF = 48, CALCULATE ( SUM ( 'Forecast group'[hi_mw] ), REMOVEFILTERS ( 'Forecast group'[group_key], 'Forecast group'[level], 'Forecast group'[fold], 'Forecast group'[is_backtest] ), 'Forecast group'[level] = "System" ),
+					nS = 1 && nF = 6, CALCULATE ( SUM ( 'Forecast group'[hi_mw] ), REMOVEFILTERS ( 'Forecast group'[group_key], 'Forecast group'[level], 'Forecast group'[fold], 'Forecast group'[is_backtest] ), 'Forecast group'[level] = "Substation", TREATAS ( VALUES ( Feeder[substation_id] ), 'Forecast group'[group_key] ) )
+				)
+		formatString: #,0.0
+		displayFolder: Forecast
+		lineageTag: bfea4962-302f-51a8-abfc-81b548ed9cf0
+
+	/// Pooled WAPE over backtest rows: total absolute miss over total actual.
+	measure 'Forecast error' =
+			VAR e = CALCULATE ( SUMX ( Forecast, ABS ( Forecast[actual_mw] - Forecast[forecast_mw] ) ), Forecast[is_backtest] = TRUE () )
+			VAR a = CALCULATE ( [Actual MW], Forecast[is_backtest] = TRUE () )
+			RETURN
+				DIVIDE ( e, a )
+		formatString: 0.0%
+		displayFolder: Forecast
+		lineageTag: b9bdb90a-3043-51e6-b83b-604fb564947a
+
+	/// Pooled WAPE of the benchmark over the same rows.
+	measure 'Same hour last week error' =
+			VAR e = CALCULATE ( SUMX ( Forecast, ABS ( Forecast[actual_mw] - Forecast[naive_mw] ) ), Forecast[is_backtest] = TRUE () )
+			VAR a = CALCULATE ( [Actual MW], Forecast[is_backtest] = TRUE () )
+			RETURN
+				DIVIDE ( e, a )
+		formatString: 0.0%
+		displayFolder: Forecast
+		lineageTag: c7ed2dbe-beb5-5e9b-baaf-b48ba1bbde7f
+
+	/// Benchmark error minus model error, in percentage points.
+	measure 'Gain pts' =
+			VAR m = [Forecast error]
+			VAR n = [Same hour last week error]
+			RETURN
+				IF ( NOT ISBLANK ( m ) && NOT ISBLANK ( n ), ( n - m ) * 100 )
+		formatString: 0.0
+		displayFolder: Forecast
+		lineageTag: b13a3f55-07fd-5ebc-aaf3-e5dea1496ad9
+
+	/// Forecast for the forecast day (chart by hour).
+	measure 'Forecast MW, forecast day' =
+			VAR d = [Forecast day]
+			RETURN
+				CALCULATE ( [Forecast MW], 'Date'[date] = d )
+		formatString: #,0.0
+		displayFolder: Forecast
+		lineageTag: a080edf9-cd47-50dc-87b8-3a20b548d2c7
+
+	/// Low end of the range on the forecast day; one feeder, one substation or all feeders.
+	measure 'Range low MW, forecast day' =
+			VAR d = [Forecast day]
+			RETURN
+				CALCULATE ( [Range low MW], 'Date'[date] = d )
+		formatString: #,0.0
+		displayFolder: Forecast
+		lineageTag: b8b812dc-c7ef-5892-a1ba-eb7c76652f0b
+
+	/// High end of the range on the forecast day.
+	measure 'Range high MW, forecast day' =
+			VAR d = [Forecast day]
+			RETURN
+				CALCULATE ( [Range high MW], 'Date'[date] = d )
+		formatString: #,0.0
+		displayFolder: Forecast
+		lineageTag: 2eb8b82f-6964-5453-b60d-24e284ae96a4
+
+	/// Demand Forecast takeaway: tomorrow's peak and hour, and the backtest error against the benchmark.
+	measure 'Title Demand Forecast' =
+			VAR pk = [Tomorrow peak MW]
+			VAR h = [Tomorrow peak hour]
+			VAR m = [Forecast error]
+			VAR n = [Same hour last week error]
+			RETURN
+				FORMAT ( [Forecast day], "ddd d mmm" ) & " peaks at " & FORMAT ( pk, "#,0.0" ) & " MW at " & FORMAT ( h, "00" ) & ":00. "
+				& "Backtest error " & FORMAT ( m, "0.0%" ) & ", same hour last week " & FORMAT ( n, "0.0%" )
+				& "; the range held " & FORMAT ( [System range coverage], "0%" ) & " of hours."
+		displayFolder: Narrative
+		lineageTag: 975eb1a0-485b-528b-9cb1-33fd4d708903
+
+	/// Feeder Detail takeaway for one feeder; asks for one feeder when several are selected.
+	measure 'Title Feeder Detail' =
+			VAR nF = DISTINCTCOUNT ( Feeder[feeder_id] )
+			VAR nm = SELECTEDVALUE ( Feeder[feeder_name] )
+			VAR ah = COALESCE ( [Alert hours last 7 days], 0 )
+			VAR pk = [Peak demand MW, last 7 days]
+			VAR rp = [Rated peak MW]
+			RETURN
+				IF (
+					nF = 1,
+					nm & ": " & FORMAT ( ah, "#,0" ) & IF ( ah = 1, " alert hour", " alert hours" ) & " in the last 7 days; highest hour "
+						& FORMAT ( pk, "0.0" ) & " MW against a rated peak of " & FORMAT ( rp, "0.0" ) & " MW.",
+					nF & " feeders selected. Pick one feeder in the slicer to see its own load, alerts and forecast range."
+				)
+		displayFolder: Narrative
+		lineageTag: a1f1c45e-c3b8-5495-83a0-4e03a73ad6ae
+
+	column feeder_id
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: feeder_id
+		lineageTag: 4bd7a1ce-980f-57f2-ac37-dac4b3989926
+
+	column target_date
+		dataType: dateTime
+		isHidden
+		formatString: dd mmm yyyy hh:nn
+		summarizeBy: none
+		sourceColumn: target_date
+		lineageTag: c7dfb18e-373e-5413-ab2d-29833fa4d01e
+
+	column hour_of_day
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: hour_of_day
+		lineageTag: bdf4876e-19e5-5b1c-9175-8a3f21d60bb7
+
+	column target_hour
+		dataType: dateTime
+		formatString: dd mmm yyyy hh:nn
+		summarizeBy: none
+		sourceColumn: target_hour
+		lineageTag: 281af50e-ce00-5f90-9a8f-cfb8ae30995f
+
+	column hour_index
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: hour_index
+		lineageTag: d14c7d78-2069-5090-a80d-49d685196235
+
+	column forecast_mw
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		summarizeBy: none
+		sourceColumn: forecast_mw
+		lineageTag: 5aedcf89-0b76-5145-8f45-6141cbdb2ace
+
+	column lo_mw
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		summarizeBy: none
+		sourceColumn: lo_mw
+		lineageTag: 10c401ef-a506-55bb-8e78-94f8d9468910
+
+	column hi_mw
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		summarizeBy: none
+		sourceColumn: hi_mw
+		lineageTag: 504dc9cf-a875-59bb-81f5-8c8dc5110da8
+
+	column naive_mw
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		summarizeBy: none
+		sourceColumn: naive_mw
+		lineageTag: c5379e9e-6092-521b-8625-951acc8edfd5
+
+	column actual_mw
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		summarizeBy: none
+		sourceColumn: actual_mw
+		lineageTag: 4ed4c6f2-3891-55fc-9884-fd40d5159ad7
+
+	column fold
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: fold
+		lineageTag: dd96da84-66a0-55e9-bd3c-732ce379805d
+
+	column is_backtest
+		dataType: boolean
+		isHidden
+		summarizeBy: none
+		sourceColumn: is_backtest
+		lineageTag: d3c7df7d-5888-5105-914a-00a604f1e36f
+
+	column model_name
+		dataType: string
+		summarizeBy: none
+		sourceColumn: model_name
+		lineageTag: da9d0dc3-ceb7-55db-b331-6b5d11bae40e
+
+	column run_id
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: run_id
+		lineageTag: cb029344-5e00-53ee-875d-912330791a4d
+
+	partition Forecast = entity
+		mode: directLake
+		source
+			entityName: gold_forecast_hourly
+			expressionSource: 'DirectLake - LH_SinarLembah'

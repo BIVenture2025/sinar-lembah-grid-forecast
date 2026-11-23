@@ -1,0 +1,56 @@
+/// Detector grading figures and the control.
+table 'Detector metric'
+	lineageTag: e8c91376-8486-5d84-a3dd-cd78cdc5fc0e
+
+	/// Control windows (planted windows moved later) that drew any alert.
+	measure 'Control hits' = CALCULATE ( SUM ( 'Detector metric'[value] ), 'Detector metric'[metric] = "Control hits" )
+		formatString: #,0
+		displayFolder: Detector
+		lineageTag: 025141fe-4232-5650-ba43-dffa2f42f572
+
+	/// Number of control windows checked.
+	measure 'Control windows' = CALCULATE ( SUM ( 'Detector metric'[value] ), 'Detector metric'[metric] = "Control windows" )
+		formatString: #,0
+		displayFolder: Detector
+		lineageTag: 8b6e32b9-90e2-5149-82c6-f8e5edecd5d6
+
+	column metric
+		dataType: string
+		summarizeBy: none
+		sourceColumn: metric
+		lineageTag: 2eeffadf-4dfd-5286-9180-c7c764ab9b82
+
+	column value
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		summarizeBy: none
+		sourceColumn: value
+		lineageTag: 4cb14385-39fd-5781-b05f-369e97667257
+
+	column n
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: n
+		lineageTag: e2526f98-5b0e-5be7-acc7-355bcfda1f08
+
+	column note
+		dataType: string
+		summarizeBy: none
+		sourceColumn: note
+		lineageTag: 698c81fc-6617-5af8-a9f2-4c12ba54e884
+
+	column cutoff
+		dataType: dateTime
+		isHidden
+		formatString: dd mmm yyyy hh:nn
+		summarizeBy: none
+		sourceColumn: cutoff
+		lineageTag: 1807aa09-bae3-5f71-9748-a36d57057025
+
+	partition 'Detector metric' = entity
+		mode: directLake
+		source
+			entityName: gold_detector_metric
+			expressionSource: 'DirectLake - LH_SinarLembah'

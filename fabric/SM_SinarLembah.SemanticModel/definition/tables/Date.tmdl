@@ -1,0 +1,90 @@
+/// Calendar 24 Oct 2025 to 23 Nov 2026 with day type and public holidays (KL and Selangor).
+table Date
+	lineageTag: 1be2bddb-02cd-5ca1-9f8a-e2d1bbd41f4b
+
+	column date
+		dataType: dateTime
+		formatString: dd mmm yyyy hh:nn
+		summarizeBy: none
+		sourceColumn: date
+		lineageTag: 27c946e6-10f1-5717-941f-68e7640899a3
+
+	column day_index
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: day_index
+		lineageTag: 92a5b68a-e3a4-503f-8e44-20ab799b5b3e
+
+	column day_type
+		dataType: string
+		summarizeBy: none
+		sourceColumn: day_type
+		lineageTag: 698e6843-7ebb-5ee4-a9b0-fa9e1e443395
+
+	column holiday_name
+		dataType: string
+		summarizeBy: none
+		sourceColumn: holiday_name
+		lineageTag: f6bc36ab-8e18-5957-8fee-c3b0009586f6
+
+	column is_holiday
+		dataType: boolean
+		summarizeBy: none
+		sourceColumn: is_holiday
+		lineageTag: bf5bdaa4-3d3d-5211-9a4c-87133a51fc06
+
+	column is_festive_week
+		dataType: boolean
+		summarizeBy: none
+		sourceColumn: is_festive_week
+		lineageTag: 259aa85a-7b9e-5013-acc6-824731868174
+
+	column weekday_name
+		dataType: string
+		summarizeBy: none
+		sourceColumn: weekday_name
+		sortByColumn: weekday_no
+		lineageTag: a0e2ab96-58ac-57b7-bf9d-e29ef978b069
+
+	column weekday_no
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: weekday_no
+		lineageTag: 4985eabe-9a38-56ed-8be4-6dc2b554d781
+
+	column day_label
+		dataType: string
+		summarizeBy: none
+		sourceColumn: day_label
+		sortByColumn: date
+		lineageTag: 26953a37-0704-5203-a604-fc22eba4033e
+
+	column week_start
+		dataType: dateTime
+		formatString: dd mmm yyyy hh:nn
+		summarizeBy: none
+		sourceColumn: week_start
+		lineageTag: d060c5b1-28f2-5750-819d-e2608ef7418f
+
+	column month_start
+		dataType: dateTime
+		isHidden
+		formatString: dd mmm yyyy hh:nn
+		summarizeBy: none
+		sourceColumn: month_start
+		lineageTag: 3032cb5c-4d18-5aa6-8ce2-fa03a46e75b7
+
+	column month_label
+		dataType: string
+		summarizeBy: none
+		sourceColumn: month_label
+		sortByColumn: month_start
+		lineageTag: 83845cf0-f3a0-5cc7-b00a-5bd28f042633
+
+	partition Date = entity
+		mode: directLake
+		source
+			entityName: gold_dim_date
+			expressionSource: 'DirectLake - LH_SinarLembah'
