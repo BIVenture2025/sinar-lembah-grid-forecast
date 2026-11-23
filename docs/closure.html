@@ -1,0 +1,563 @@
+<!DOCTYPE html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>P37 closure: Grid Demand Forecast and Meter Watch</title><style>body{font:16px/1.55 Calibri,Arial,sans-serif;color:#1B2A3A;max-width:900px;margin:2rem auto;padding:0 1rem}h1{font:700 1.7rem Cambria,serif;margin-top:2.5rem;border-top:2px solid #D5DEE8;padding-top:1rem}section:first-of-type h1{border:0}h2{font:700 1.2rem Cambria,serif;margin-top:1.5rem}table{border-collapse:collapse;width:100%;margin:1rem 0;font-size:.92rem}th{background:#1F4E79;color:#fff;text-align:left}th,td{border:1px solid #D5DEE8;padding:.35rem .5rem;vertical-align:top}code{background:#F3F5F8;padding:0 .2em}.lead{background:#F3F5F8;border-left:4px solid #C0492F;padding:.8rem 1rem}nav a{margin-right:.8rem}</style></head><body><p class='lead'><b>P37 closure, 2026-11-23.</b> Grid Demand Forecast and Meter Watch for fictional Sinar Lembah Grid: an Eventhouse scoring hourly feeder readings with KQL update policies, a Lakehouse, three notebooks with a route R5 forecast, a gated pipeline and a Direct Lake report, built, published and closed in one session against a budget of 5 to 6. Detector: 15 of 16 matured planted events, 0 of 8 control windows. Forecast: 5.17% error against 7.82% for same hour last week, gain 2.65 points (1.81 to 3.56); the range held 72% of hours against 80%. Build exit: rebuilt from Git into an empty workspace, 9 of 9 items, same totals. Findings: five tools or APIs reported success on a wrong result and only a read-back caught them; a DAX variable named like a function deployed and failed every query; cost per request rose about 2.5 times within one conversation segment. Cost is a floor: two stretches have no usage record. Fictional company, synthetic data.</p><nav><a href='#c1'>C1</a><a href='#c2'>C2</a><a href='#c3'>C3</a><a href='#c5'>C5</a><a href='#c6'>C6</a><a href='#c7'>C7</a><a href='#c8'>C8</a></nav><section id='c1'><h1>C1 - Stage-by-stage post-mortem</h1>
+<p><strong>P37 Grid Demand Forecast and Meter Watch, closure compiled 2026-11-23 (Cowork, Opus 5.5).</strong> One session ran all five stages, by the owner's instruction ("start p37 in single session"); the Data Platform budget is 5 to 6. Wall clock about 07:20 to 11:30 MYT, from the first and last file times in the project and probe folders (upper bound: it includes a device outage before 09:53). Every figure names its source.</p>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Planned (brief §9)</th>
+<th>Actual</th>
+<th>Hiccup</th>
+<th>Learning</th>
+<th>Pivot</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Discover (G1)</td>
+<td>Probes PR0 to PR6, brief</td>
+<td>PR0 to PR5 PASS; PR6 FAIL (<code>ConnectionMismatch</code>); brief accepted</td>
+<td>The Eventhouse connector refuses control commands; <code>hourofday()</code> is long</td>
+<td>§229c, S284, S285</td>
+<td>Owner: "Repo-first, no sync" (no Fabric Git sync; deploy from the repo)</td>
+</tr>
+<tr>
+<td>Design (G2)</td>
+<td>Design Package, subagent audit</td>
+<td>5 pages mocked, architecture, model design sheet, tests; independent design review applied; owner "Go"</td>
+<td>none recorded</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Build (G3)</td>
+<td>Skills 8, 3, 1, 12; deploy from Git; plan post-action</td>
+<td>15 of 17 components built (2 nice-to-haves not); exit criteria met</td>
+<td>Runner token 401s logged ok; <code>topN</code> VAR; table-form REMOVEFILTERS; MAX-date windows; pipeline parameter shape; 9 render defects in pass 1; 6 plan-create runs</td>
+<td>§229a, b, e, f, h, i; S273 to S283, S286</td>
+<td>Brief Rev 2 to Rev 4: a third notebook (seed), weather table, three weak planted events, 12-week baselines</td>
+</tr>
+<tr>
+<td>Publish (G4)</td>
+<td>Skill 9: repo, guide, card</td>
+<td>Public repo (161 files), guide (6 steps), card 24, BUILD_RECORD; links checked in Chrome</td>
+<td>GitHub description typed with dropped characters; OneLake host blocked by scrub</td>
+<td>§229k</td>
+<td>Pitch deck deferred (not in the brief)</td>
+</tr>
+<tr>
+<td>Close (G5)</td>
+<td>Skill 10</td>
+<td>C1 to C8, HTML, 14 SETTLED rows, guide §229, CORE_RULES 125, two lint changes, Skill 8 amendment</td>
+<td>New lint rule false-positived on JavaScript in a P15 string; SETTLED rows over length; runner registry missed a suite</td>
+<td>§229a</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<h2>Patterns across stages</h2>
+<ul>
+<li><strong>Silent success, five times.</strong> A runner logged 401s as ok; a deploy accepted a broken measure; the job API accepted and ignored a parameter shape; <code>notebook.exit</code> ends a failed verdict as Completed; a typed field dropped characters. Each was caught only by reading the result back (row count, <code>INFO.MEASURES</code> state, run parameters, job status, field value). This is P36's lesson (S259) on a different stack.</li>
+<li><strong>A beta import taught by failure.</strong> Five of six plan-create runs failed, each on a different rule (§229f). Four were discovery: the importer's behaviour is not documented. One (the transport-error crash) was a script defect.</li>
+<li><strong>Three tools reported clean and were not done</strong> at Close: the lint rule's first cross-project scan hit a false positive, the SETTLED split check caught two over-length rows I had just written, and the test runner had never registered <code>test_lint_rules_p35.py</code>.</li>
+</ul>
+<h2>Counts asserted in this project, enumerated</h2>
+<table>
+<thead>
+<tr>
+<th>Count</th>
+<th>Value</th>
+<th>Basis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Readings</td>
+<td>455,040 = 48 feeders × 9,480 hours</td>
+<td>brief §7; KQL count in Dev and Scratch</td>
+</tr>
+<tr>
+<td>Planted events graded</td>
+<td>16 matured of 64 planted; 15 caught; the miss is a weak drop</td>
+<td><code>NB_SinarLembah_Gold</code> <code>GOLD_OK</code></td>
+</tr>
+<tr>
+<td>Control windows</td>
+<td>8, 0 hit</td>
+<td>same</td>
+</tr>
+<tr>
+<td>Repo items rebuilt</td>
+<td>9: VL_SinarLembah, EH_SinarLembah (with its KQL database as a child), LH_SinarLembah, NB Seed, NB Gold, NB Forecast, PL_SinarLembah_Daily, SM_SinarLembah, P37_SinarLembah report</td>
+<td><code>02_Build/estate/fabric/</code>; run 6 log</td>
+</tr>
+<tr>
+<td>Model</td>
+<td>10 tables, 13 relationships, 48 measures</td>
+<td><code>test_lint_rules_p37.py</code> counts 48 in the TMDL</td>
+</tr>
+<tr>
+<td>Report</td>
+<td>5 pages, 66 visuals</td>
+<td>BUILD_RECORD component 12</td>
+</tr>
+<tr>
+<td>Plan-create runs</td>
+<td>6 (run1 to run3 killed, run4 seed fail, run5 crash, run6 verify PASS)</td>
+<td><code>_probe/p37_20261123/P37_PLAN_CREATE_LOG_run*.txt</code></td>
+</tr>
+<tr>
+<td>Render defects, pass 1</td>
+<td>9</td>
+<td>§229i</td>
+</tr>
+<tr>
+<td>Public repo</td>
+<td>161 files; 205 GUIDs, all benign by census</td>
+<td><code>publish/build_public_repo.py</code> output</td>
+</tr>
+<tr>
+<td>SETTLED rows added</td>
+<td>14 (S273 to S286)</td>
+<td><code>SETTLED.md</code> index, 286 rows</td>
+</tr>
+</tbody>
+</table></section><section id='c2'><h1>C2 - Plan vs actual</h1>
+<p>Basis: brief §5 (components), §9 (session plan), §10 (exit criteria); the kickoff's tests; BUILD_RECORD.</p>
+<h2>Components (17)</h2>
+<ul>
+<li>Delivered as specified: 13 (components 1 to 8, 10, 11 and 13 to 15).</li>
+<li>Delivered differently: 2. Component 9 (MLExperiment, MLModel) is created by the notebook, not deployed from Git. Component 12 has 5 pages, with Feeder Detail opening on all feeders (no proven default slicer in PBIR).</li>
+<li>Not delivered: 2 nice-to-haves (Real-Time Dashboard, out of the one-session budget; Activator, owner "not now").</li>
+<li>Added unplanned: a third notebook (<code>NB_SinarLembah_Seed</code>, brief Rev 4: the notebook cap was 2), a weather table, <code>stats_check.py --regression</code>.</li>
+</ul>
+<h2>Kickoff tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Eventhouse MCP in a real build</td>
+<td>Delivered: every KQL read in Build (S284)</td>
+</tr>
+<tr>
+<td>DataFactory MCP in a real build</td>
+<td><strong>Not delivered.</strong> Authentication was checked; pipeline runs went through the job API from the runner. Not chosen deliberately: the runner already ran every other job, and I did not go back to the test</td>
+</tr>
+<tr>
+<td>Route R5 with an AutoML baseline and a model card</td>
+<td>Delivered (K8: FLAML did not beat the model on fold 9)</td>
+</tr>
+<tr>
+<td>Technique library entries</td>
+<td>Delivered (2 rows)</td>
+</tr>
+<tr>
+<td>Deploy from Git into an empty workspace as the Build exit</td>
+<td>Delivered (9 of 9, 0 dev ids, same totals)</td>
+</tr>
+<tr>
+<td>Deployment plan with a post-action</td>
+<td>Delivered (seed notebook, Completed in 2 min)</td>
+</tr>
+</tbody>
+</table>
+<h2>Sessions and gates</h2>
+<ul>
+<li>Sessions: 1 against a budget of 5 to 6 (owner's instruction). Build ran on Opus, not Sonnet, for the same reason.</li>
+<li>Usage captures: G0, G1, G2, G3 and the Close read; <strong>two stretches missing</strong>: Build before the first summary, and Publish before the second (no G4 read).</li>
+</ul>
+<h2>Avoidable or discovery</h2>
+<p>Weighting basis: count of rework loops, each weighted 1.
+| Rework | Kind |
+|---|---|
+| Plan-create runs 1 to 4 (child item, mirroring refused, dependency order and zero GUID, database name) | Discovery: beta API, undocumented |
+| Plan-create run 5 (crash on a transport error) | Avoidable: no GET retry in the script |
+| Runner 401s logged ok | Avoidable: token cache with no expiry check |
+| <code>topN</code> VAR | Avoidable now (lint exists from today); discovery then |
+| Table-form REMOVEFILTERS | Avoidable: expanded-table behaviour is documented DAX |
+| MAX-date window measures | Avoidable |
+| Pipeline parameter shape | Discovery: the API accepted the wrong form silently |
+| Render pass 1, 9 defects | Mixed: 4 scrollbars and 2 wrapping labels were avoidable by sizing rules; the blank member row and axis density needed the renderer |
+Split: 5 discovery, 5 avoidable, 1 mixed, of 11 loops.</p></section><section id='c3'><h1>C3 - Comparison with the previous Data Platform project (P34)</h1>
+<p>Basis: P34 <code>09_Closure/C1</code>, the cost ledger row for P34, guide §224 (W12), this project's BUILD_RECORD. P34 is the Fabric E2E Credit Control Desk for Rimbun Niaga, a Combined Solution with a Data Platform core; it is the last project that built a Fabric estate, and its status in the record (built, published, closed) matches its folders.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>P34</th>
+<th>P37</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sessions</td>
+<td>13 sittings (S0 to S11 + S10 follow-up), publishing as S12</td>
+<td>1, all five stages</td>
+</tr>
+<tr>
+<td>Stages</td>
+<td>Pre-lifecycle phases</td>
+<td>First Data Platform on the five stages</td>
+</tr>
+<tr>
+<td>Hot store</td>
+<td>Warehouse and Lakehouse; no Eventhouse</td>
+<td>Eventhouse (KQL, update policies) plus Lakehouse shortcuts</td>
+</tr>
+<tr>
+<td>ML</td>
+<td>Not route R5 end to end</td>
+<td>Route R5: notebook, MLExperiment, MLModel, AutoML baseline, model card</td>
+</tr>
+<tr>
+<td>Build exit from Git</td>
+<td>Proven after the fact in W12 on P34's tree (16 of 16 items, 2 waves)</td>
+<td>Proven as the Build exit (9 of 9, 3 waves, post-action seed, then the pipeline ran in the new workspace and every figure equalled Dev)</td>
+</tr>
+<tr>
+<td>Cost record</td>
+<td>0 of 13 sessions captured</td>
+<td>4 gate reads plus the Close segment; Publish missing</td>
+</tr>
+</tbody>
+</table>
+<h2>What P37 learned that P34's record does not reflect</h2>
+<ul>
+<li>W12's create route (S250) did not include an Eventhouse. A KQL database travels as a child item, its definition refuses mirroring, and its display name can be ambiguous in a new workspace (S281 to S283). S250 is extended, not contradicted.</li>
+<li>P34's pipeline gates were proven on notebook exit values; P37 shows an exit value cannot fail a job (S279). P34's gates should be re-read with that in mind; this is an outstanding item, not a confirmed defect, because P34's notebooks may already raise.</li>
+<li>A deploy from Git is not finished until the data is seeded and the pipeline has run in the new workspace; P34's W12 proof stopped at the items and a first notebook run.</li>
+</ul></section><section id='c5'><h1>C5 - What to do better next project</h1>
+<h2>What I did wrong</h2>
+<ol>
+<li><strong>Lost two stretches of the usage record.</strong> The conversation was summarised during Build and again during Publish, each time before a read; neither stretch has a cost record. P36's C5 named the same failure. Fix: take the read before any long step, not at the gate (§229j, CORE_RULES 125).</li>
+<li><strong>Shipped a runner that logged 401s as ok.</strong> The token cache had no expiry check. Two runs were lost before I read the job status instead of the log line (§229h, S286).</li>
+<li><strong>Wrote three DAX defects</strong> (<code>topN</code> VAR, table-form REMOVEFILTERS, MAX-date windows). The first is now a lint error; the second is in the lint advice; the third is a rule (§229a, b).</li>
+<li><strong>Did not attempt the DataFactory MCP test.</strong> It was in the kickoff; the runner was already working, and I did not go back (C2).</li>
+<li><strong>Did not record the regenerate-and-diff before Publish</strong> (S255, a kickoff carry-over). Run at Close instead: model 16 files and report 77 files identical to the estate repo at 52ceab5, so nothing shipped differs, but the gate ran after the fact.</li>
+<li><strong>Wrote two over-length SETTLED rows and a lint rule with a false positive</strong> at Close; the checks caught both before the end of the session.</li>
+</ol>
+<h2>What the owner did that cost time</h2>
+<ul>
+<li><strong>One session for a 5-to-6-session type.</strong> It held, but Build ran on Opus instead of Sonnet, and within one segment the cache read per request rose about 2.5 times (C6). The conversation was summarised twice instead of split at gates, and each summary cost part of the record.</li>
+<li>The device went offline mid-Build (outage notice, then "Go" at 09:53). Not a choice, but the queued runner tasks waited on it.</li>
+</ul>
+<h2>What the owner did that was right and I did not</h2>
+<ul>
+<li><strong>"Repo-first, no sync"</strong> after PR6 failed. I was set to fix the GitHub connection; the owner's call removed Fabric Git sync from the critical path and made the repository the only source, which is exactly what the Build exit tests.</li>
+<li><strong>KQL hourly batches instead of Eventstream.</strong> Deterministic, replayable, cheaper, and the update policies still score each batch as it lands.</li>
+</ul>
+<h2>Ranked changes (expected value)</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Change</th>
+<th>Evidence</th>
+<th>Cost to adopt</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Query <code>INFO.MEASURES</code> state after every model deploy</td>
+<td><code>topN</code> passed every file check</td>
+<td>One DAX query; now in Skill 8 and CORE_RULES 125</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Read-back of every job and run, not the runner's log line</td>
+<td>5 silent successes (C1)</td>
+<td>Done for the runner; keep in Skill 8</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Usage read before long steps</td>
+<td>G4 lost here, G2 to G4 lost in P36</td>
+<td>Two tool calls</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Split a Data Platform at G2 even when the owner asks for one session, or say the cost of not splitting before starting</td>
+<td>C6: cost per request rises with length since the last reset (221k to 544k within one segment); unplanned summaries cost two stretches of the record</td>
+<td>Ask once in Discover</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Put the plan-create script's verify mode and GET retries in the template</td>
+<td>Run 5 crashed after a successful import</td>
+<td>Small; script exists</td>
+</tr>
+</tbody>
+</table></section><section id='c6'><h1>C6 - Test one assumption: "one long session is cheaper than splitting"</h1>
+<p>The owner asked for one session; the engine's budget says 5 to 6. The assumption behind running long is that one session avoids the re-reading cost of each new start (preflight, SETTLED, brief, handover). Tested on cache read, the metered quantity that dominates usage (standing instructions were 60 to 68% of effective usage in every read).</p>
+<h2>What was measured (<code>_sessions/_cost/</code>)</h2>
+<p>The conversation was summarised twice: once during Build (marker <code>S1_G3_segment1_marker.json</code>) and once during Publish. The usage skill counts only the part since the last summary, so the session has three segments.</p>
+<table>
+<thead>
+<tr>
+<th>Segment</th>
+<th>Read</th>
+<th style="text-align: right;">Requests</th>
+<th style="text-align: right;">Cache read</th>
+<th style="text-align: right;">Per request</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A: start to the first summary</td>
+<td>G0</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">4,641,715</td>
+<td style="text-align: right;">221,034</td>
+</tr>
+<tr>
+<td>A</td>
+<td>G1, Discover</td>
+<td style="text-align: right;">114</td>
+<td style="text-align: right;">40,917,329</td>
+<td style="text-align: right;">358,924</td>
+</tr>
+<tr>
+<td>A</td>
+<td>G2, Design</td>
+<td style="text-align: right;">155</td>
+<td style="text-align: right;">63,227,855</td>
+<td style="text-align: right;">407,922</td>
+</tr>
+<tr>
+<td>A</td>
+<td>Build before the first summary</td>
+<td style="text-align: right;">not on record</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr>
+<td>B: first to second summary</td>
+<td>G3, Build exit</td>
+<td style="text-align: right;">228</td>
+<td style="text-align: right;">107,463,234</td>
+<td style="text-align: right;">471,330</td>
+</tr>
+<tr>
+<td>B</td>
+<td>Publish before the second summary</td>
+<td style="text-align: right;">not on record</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr>
+<td>C: after the second summary</td>
+<td>Close read</td>
+<td style="text-align: right;">79</td>
+<td style="text-align: right;">22,353,048</td>
+<td style="text-align: right;">282,950</td>
+</tr>
+</tbody>
+</table>
+<p>Within segment A, the marginal cost per request rose from 221k (start) to 390k (Discover, G0 to G1) and 544k (Design, G1 to G2): about 2.5 times, with the work getting no heavier per request. Segment C, starting from a summary, ran at 283k. Segment B also started from a summary but ran 228 requests, and averaged 471k.</p>
+<h2>What this shows</h2>
+<p>Cost per request is driven by how long the conversation has run since its last reset, a summary or a new session. The two automatic summaries did most of what a planned split would have done to the token bill, so the token saving of a planned split over this session cannot be measured from these reads. An upper bound only: had segment B run at segment C's 283k, it would have read about 64.5M instead of 107.5M, about 22% of the recorded total. That is not an estimate, because Build's requests carried heavier tool output than Close's.</p>
+<p>What the unplanned summaries did cost is measurable: <strong>two stretches of work have no usage record</strong> (Build before the first summary, Publish before the second), and the summaries dropped detail that the record then had to be rebuilt from files (C8, and this section's first draft, which read G3 as cumulative and had to be rewritten).</p>
+<h2>Confounds</h2>
+<ul>
+<li>Build and Publish carried heavier tool output (DAX results, logs, captures) than Discover or Close.</li>
+<li>Summaries happen when the context fills, not at a gate, so segment lengths are not chosen.</li>
+<li>Quality: no defect was traced to a summary or to the absence of a split.</li>
+</ul>
+<h2>Conclusion</h2>
+<p>The assumption is not supported: a long session does not save tokens, because the history it carries makes each later request dearer (2.5 times within one segment here). It is not refuted on totals either, because the automatic summaries reset the history twice. The case for splitting at a gate is that it puts the reset where the work allows one, with a usage read and a handover first, instead of mid-Build with neither. P24's finding (§114, splitting saved almost nothing) was measured on short sessions with no long build tail; the two do not conflict.</p></section><section id='c7'><h1>C7 - Folder disposition</h1>
+<p>Basis: listings of the project folder, <code>_probe/p37_20261123/</code> and the workspaces, taken at Close. Nothing has been moved or deleted; the owner's one go-ahead decides the last three groups (handover, owner actions).</p>
+<h2>Project folder <code>Projects/37) Grid Demand Forecast and Meter Watch/</code></h2>
+<table>
+<thead>
+<tr>
+<th>Path</th>
+<th>Class</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>00_Brief/</code> (brief Rev 4, model card)</td>
+<td>Keep, deliverable</td>
+<td>The contract and the R5 model card</td>
+</tr>
+<tr>
+<td><code>01_Design/</code> (package, model design sheet, NEXT_VERSION, src)</td>
+<td>Keep, deliverable</td>
+<td>Approved Design Package; NEXT_VERSION holds the not-built items</td>
+</tr>
+<tr>
+<td><code>02_Build/estate/fabric/</code></td>
+<td>Keep, deliverable</td>
+<td>The estate as deployed; equals the private repo at <code>9ab11cf</code></td>
+</tr>
+<tr>
+<td><code>02_Build/src/</code>, <code>eventhouse/</code>, <code>model_qa/</code></td>
+<td>Keep, deliverable</td>
+<td>Generators, KQL scripts, BPA gate result</td>
+</tr>
+<tr>
+<td><code>02_Build/readback_dev/</code></td>
+<td>Keep, evidence</td>
+<td>Definitions read back from Dev</td>
+</tr>
+<tr>
+<td><code>02_Build/estate_fabric.tar</code>, <code>02_Build/sm.tar</code></td>
+<td>Delete (move to <code>_to_delete/</code>)</td>
+<td>Transfer archives; their contents are unpacked beside them</td>
+</tr>
+<tr>
+<td><code>03_Publish/</code> less the tgz</td>
+<td>Keep, deliverable</td>
+<td>BUILD_RECORD, publish scripts, allowlist, repo snapshot, card</td>
+</tr>
+<tr>
+<td><code>03_Publish/P37_03_Publish.tgz</code></td>
+<td>Delete (move to <code>_to_delete/</code>)</td>
+<td>Transfer archive, unpacked beside it</td>
+</tr>
+<tr>
+<td><code>04_Close/</code>, <code>_sessions/</code></td>
+<td>Keep</td>
+<td>Closure, cost reads, handover, kickoff</td>
+</tr>
+</tbody>
+</table>
+<h2>Probe folder <code>_probe/p37_20261123/</code></h2>
+<table>
+<thead>
+<tr>
+<th>Path</th>
+<th>Class</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>P37_PLAN_CREATE.py</code>, <code>plan_P37_create.yml</code>, <code>p37_jobs.py</code>, <code>p37_runner.py</code>, <code>p37_clone.py</code>, <code>kusto_*.py</code>, <code>onelake_put.py</code></td>
+<td>Keep, evidence</td>
+<td>Cited by SETTLED S280 to S283 and S286</td>
+</tr>
+<tr>
+<td><code>P37_PLAN_CREATE_LOG_run1..6*.txt</code>, <code>RUNNER_LOG.txt</code>, <code>results/</code></td>
+<td>Keep, evidence (frozen)</td>
+<td>The failure sequence behind §229f; do not archive</td>
+</tr>
+<tr>
+<td><code>close_backup/</code></td>
+<td>Archive after the owner reads §229</td>
+<td>Engine files as they were before <code>apply_lessons_p37.py</code></td>
+</tr>
+<tr>
+<td><code>queue/u12_plan_create.hold</code></td>
+<td>Delete</td>
+<td>Never used</td>
+</tr>
+</tbody>
+</table>
+<h2>Outside the folder (needs the owner's yes)</h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Class</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fabric workspace <code>SinarLembah-Dev</code></td>
+<td>Keep</td>
+<td>The built estate the captures come from</td>
+</tr>
+<tr>
+<td>Fabric workspace <code>SinarLembah-Scratch</code></td>
+<td>Delete</td>
+<td>The Build exit is recorded; it doubles capacity use</td>
+</tr>
+<tr>
+<td>Probe items in Dev: KQL tables and shortcuts <code>zz_probe*</code>, notebooks <code>ZZ_NB_P37_Probe</code>, <code>ZZ_NB_P37_PR7</code>, <code>zz_probe_nbk</code></td>
+<td>Delete</td>
+<td>Discover probes, results in the brief</td>
+</tr>
+<tr>
+<td>Windows clones <code>C:\p37_from_git_1</code> to <code>_5</code></td>
+<td>Delete</td>
+<td>Inputs to plan-create runs 1 to 6</td>
+</tr>
+<tr>
+<td>Queue runner <code>p37_runner.py</code></td>
+<td>Stop (STOP file)</td>
+<td>No more queued work</td>
+</tr>
+</tbody>
+</table>
+<p>Post-move checks: re-run <code>scrub_check.py</code> over <code>04_Close/</code> and <code>validate_pbip.py</code> over the estate after any move.</p></section><section id='c8'><h1>C8 - Cost</h1>
+<p>Basis: four usage-skill reads and one segment marker in <code>_sessions/_cost/</code>, merged by <code>capture_session_cost.py --merge</code> on 2026-11-23 (output below). Turns and active hours are <code>n/a</code>: the usage skill cannot measure them. There is no money figure, because no price list is recorded for this model.</p>
+<p>Merge output, copied from the tool (G0 and G1 superseded by G2, same segment; the marker excluded by name):</p>
+<table>
+<thead>
+<tr>
+<th>S</th>
+<th>Segment and read</th>
+<th style="text-align: right;">Requests</th>
+<th style="text-align: right;">Cache read</th>
+<th style="text-align: right;">Cache write</th>
+<th style="text-align: right;">Output</th>
+<th style="text-align: right;">Instr %</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>A: start to Design gate (G2)</td>
+<td style="text-align: right;">155</td>
+<td style="text-align: right;">63,227,855</td>
+<td style="text-align: right;">476,824</td>
+<td style="text-align: right;">147,730</td>
+<td style="text-align: right;">60.3</td>
+</tr>
+<tr>
+<td>1</td>
+<td>B: after the first summary, to the Build exit (G3)</td>
+<td style="text-align: right;">228</td>
+<td style="text-align: right;">107,463,234</td>
+<td style="text-align: right;">541,414</td>
+<td style="text-align: right;">185,720</td>
+<td style="text-align: right;">63.1</td>
+</tr>
+<tr>
+<td>1</td>
+<td>C: after the second summary, end of Publish and Close to the handover</td>
+<td style="text-align: right;">79</td>
+<td style="text-align: right;">22,353,048</td>
+<td style="text-align: right;">240,256</td>
+<td style="text-align: right;">70,054</td>
+<td style="text-align: right;">67.7</td>
+</tr>
+<tr>
+<td>On record</td>
+<td></td>
+<td style="text-align: right;">462</td>
+<td style="text-align: right;">193,044,137</td>
+<td style="text-align: right;">1,258,494</td>
+<td style="text-align: right;">403,504</td>
+<td style="text-align: right;"></td>
+</tr>
+</tbody>
+</table>
+<p>Tool calls on record: 538. Browser share: 8% of calls on record. Cache read per request: 417,844.</p>
+<h2>What these figures are not</h2>
+<ul>
+<li><strong>A floor, not a total.</strong> Build before the first summary and Publish before the second have no usage on record. The Close steps after the last read (this section, the HTML, scrub, <code>session_close.py</code>) are not counted either.</li>
+<li><strong>Why the gaps:</strong> the conversation was summarised twice, each time before a read was taken (C5 item 1, C6).</li>
+<li><strong>A tool defect, found and fixed in this Close.</strong> The merge crashed with <code>KeyError: 'tokens'</code> on the segment marker file (<code>usage: null</code>). It now names and excludes a file with no usage figures; a new self-test control covers it (27 of 27).</li>
+<li><strong>A reading error, found and fixed in this Close.</strong> The first draft of C6 treated G3 as cumulative with G0 to G2; the marker shows G3 is its own segment. C6, C2, C5, the handover and guide §229j were corrected.</li>
+<li><code>cache_read_per_turn</code>, the session-hygiene number, cannot be filled for a usage-skill session; C6 uses cache read per request instead.</li>
+</ul>
+<p>Ledger row appended to <code>_ENGINE/reference/PROJECT_COST_LEDGER.md</code> and marked FLOOR.</p></section><footer><p><small>C4: this page is C1 to C3 and C5 to C8 in one file, generated from the markdown in <code>04_Close/</code> by <code>build_p37_closure.py</code>. No external assets.</small></p></footer></body></html>

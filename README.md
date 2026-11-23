@@ -12,6 +12,8 @@ workspace in yours.
 
 **Rebuild guide:** https://biventure2025.github.io/sinar-lembah-grid-forecast/docs/guide.html
 
+**Project closure** (what went wrong, what it cost, what changed): https://biventure2025.github.io/sinar-lembah-grid-forecast/docs/closure.html
+
 ![Home page](docs/img/p37/home.jpg)
 
 ## What it does
