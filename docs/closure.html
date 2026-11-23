@@ -352,15 +352,15 @@ Split: 5 discovery, 5 avoidable, 1 mixed, of 11 loops.</p></section><section id=
 <tr>
 <td>C: after the second summary</td>
 <td>Close read</td>
-<td style="text-align: right;">79</td>
-<td style="text-align: right;">22,353,048</td>
-<td style="text-align: right;">282,950</td>
+<td style="text-align: right;">98</td>
+<td style="text-align: right;">29,637,462</td>
+<td style="text-align: right;">302,423</td>
 </tr>
 </tbody>
 </table>
-<p>Within segment A, the marginal cost per request rose from 221k (start) to 390k (Discover, G0 to G1) and 544k (Design, G1 to G2): about 2.5 times, with the work getting no heavier per request. Segment C, starting from a summary, ran at 283k. Segment B also started from a summary but ran 228 requests, and averaged 471k.</p>
+<p>Within segment A, the marginal cost per request rose from 221k (start) to 390k (Discover, G0 to G1) and 544k (Design, G1 to G2): about 2.5 times, with the work getting no heavier per request. Segment C, starting from a summary, ran at 302k. Segment B also started from a summary but ran 228 requests, and averaged 471k.</p>
 <h2>What this shows</h2>
-<p>Cost per request is driven by how long the conversation has run since its last reset, a summary or a new session. The two automatic summaries did most of what a planned split would have done to the token bill, so the token saving of a planned split over this session cannot be measured from these reads. An upper bound only: had segment B run at segment C's 283k, it would have read about 64.5M instead of 107.5M, about 22% of the recorded total. That is not an estimate, because Build's requests carried heavier tool output than Close's.</p>
+<p>Cost per request is driven by how long the conversation has run since its last reset, a summary or a new session. The two automatic summaries did most of what a planned split would have done to the token bill, so the token saving of a planned split over this session cannot be measured from these reads. An upper bound only: had segment B run at segment C's 302k, it would have read about 69.0M instead of 107.5M, about 19% of the recorded total. That is not an estimate, because Build's requests carried heavier tool output than Close's.</p>
 <p>What the unplanned summaries did cost is measurable: <strong>two stretches of work have no usage record</strong> (Build before the first summary, Publish before the second), and the summaries dropped detail that the record then had to be rebuilt from files (C8, and this section's first draft, which read G3 as cumulative and had to be rewritten).</p>
 <h2>Confounds</h2>
 <ul>
@@ -533,28 +533,28 @@ Split: 5 discovery, 5 avoidable, 1 mixed, of 11 loops.</p></section><section id=
 </tr>
 <tr>
 <td>1</td>
-<td>C: after the second summary, end of Publish and Close to the handover</td>
-<td style="text-align: right;">79</td>
-<td style="text-align: right;">22,353,048</td>
-<td style="text-align: right;">240,256</td>
-<td style="text-align: right;">70,054</td>
-<td style="text-align: right;">67.7</td>
+<td>C: after the second summary, end of Publish and all of Close (the session's last read)</td>
+<td style="text-align: right;">98</td>
+<td style="text-align: right;">29,637,462</td>
+<td style="text-align: right;">269,337</td>
+<td style="text-align: right;">87,485</td>
+<td style="text-align: right;">67.2</td>
 </tr>
 <tr>
 <td>On record</td>
 <td></td>
-<td style="text-align: right;">462</td>
-<td style="text-align: right;">193,044,137</td>
-<td style="text-align: right;">1,258,494</td>
-<td style="text-align: right;">403,504</td>
+<td style="text-align: right;">481</td>
+<td style="text-align: right;">200,328,551</td>
+<td style="text-align: right;">1,287,575</td>
+<td style="text-align: right;">420,935</td>
 <td style="text-align: right;"></td>
 </tr>
 </tbody>
 </table>
-<p>Tool calls on record: 538. Browser share: 8% of calls on record. Cache read per request: 417,844.</p>
+<p>Tool calls on record: 560. Browser share: 8% of calls on record. Cache read per request: 416,483. The segment C read was retaken as the session's last read, after the handover; it replaces the first read of the same segment (79 requests).</p>
 <h2>What these figures are not</h2>
 <ul>
-<li><strong>A floor, not a total.</strong> Build before the first summary and Publish before the second have no usage on record. The Close steps after the last read (this section, the HTML, scrub, <code>session_close.py</code>) are not counted either.</li>
+<li><strong>A floor, not a total.</strong> Build before the first summary and Publish before the second have no usage on record. The steps after the last read (this table, the HTML rebuild, the closure page push, <code>session_close.py</code>) are not counted either.</li>
 <li><strong>Why the gaps:</strong> the conversation was summarised twice, each time before a read was taken (C5 item 1, C6).</li>
 <li><strong>A tool defect, found and fixed in this Close.</strong> The merge crashed with <code>KeyError: 'tokens'</code> on the segment marker file (<code>usage: null</code>). It now names and excludes a file with no usage figures; a new self-test control covers it (27 of 27).</li>
 <li><strong>A reading error, found and fixed in this Close.</strong> The first draft of C6 treated G3 as cumulative with G0 to G2; the marker shows G3 is its own segment. C6, C2, C5, the handover and guide §229j were corrected.</li>
